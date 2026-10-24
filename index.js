@@ -25,7 +25,12 @@ async function callGemini(payload) {
         try {
             const currentKey = geminiKeys[activeKeyIndex];
             const aiClient = new GoogleGenAI({ apiKey: currentKey });
-            const response = await aiClient.models.generateContent(payload);
+            
+            const requestPayload = typeof payload === 'object' && !payload.model 
+                ? { model: 'gemini-3.8-flash', ...payload } 
+                : { model: 'gemini-3.8-flash', ...payload };
+
+            const response = await aiClient.models.generateContent(requestPayload);
             return response;
         } catch (err) {
             console.warn(`⚠️ API Key [Index ${activeKeyIndex}] failed: ${err.message}. Rotating...`);
@@ -173,7 +178,7 @@ async function startBot() {
 
                 try {
                     const response = await callGemini({
-                        model: 'gemini-1.5-flash',
+                        model: 'gemini-3.8-flash',
                         contents: text,
                         config: { systemInstruction: sysInstruction }
                     });
@@ -233,7 +238,7 @@ async function startBot() {
                     continue;
                 }
                 try {
-                    const response = await callGemini({ model: 'gemini-1.5-flash', contents: prompt });
+                    const response = await callGemini({ model: 'gemini-3.8-flash', contents: prompt });
                     await sock.sendMessage(remoteJid, { text: response.text });
                 } catch (err) {
                     await sock.sendMessage(remoteJid, { text: `❌ AI Error: ${err.message}` });
@@ -324,7 +329,7 @@ async function startBot() {
                 try {
                     await sock.sendMessage(remoteJid, { text: '🎙️ Thinking and recording response...' });
                     const aiResponse = await callGemini({
-                        model: 'gemini-1.5-flash',
+                        model: 'gemini-3.8-flash',
                         contents: prompt,
                         config: { systemInstruction: "Respond like a close friend in 2-3 short, spoken sentences." }
                     });
@@ -381,7 +386,7 @@ async function startBot() {
                 try {
                     await sock.sendMessage(remoteJid, { text: `⚽ Fetching latest updates for *${team}*...` });
                     const response = await callGemini({
-                        model: 'gemini-1.5-flash',
+                        model: 'gemini-3.8-flash',
                         contents: `Provide the latest match scores, upcoming fixtures, and team news for ${team}. Format nicely with emojis.`
                     });
                     await sock.sendMessage(remoteJid, { text: response.text });
@@ -487,7 +492,7 @@ async function startBot() {
                 }
                 try {
                     const response = await callGemini({
-                        model: 'gemini-1.5-flash',
+                        model: 'gemini-3.8-flash',
                         contents: `Summarize the following text into 3 clear bullet points:\n\n"${quotedText}"`,
                     });
                     await sock.sendMessage(remoteJid, { text: `📝 *Summary:*\n\n${response.text}` });
@@ -505,7 +510,7 @@ async function startBot() {
                 }
                 try {
                     const response = await callGemini({
-                        model: 'gemini-1.5-flash',
+                        model: 'gemini-3.8-flash',
                         contents: `Analyze this message: "${quotedText}". Provide key insights, tone, and a brief summary.`,
                     });
                     await sock.sendMessage(remoteJid, { text: response.text });
@@ -524,7 +529,7 @@ async function startBot() {
                 try {
                     await sock.sendMessage(remoteJid, { text: '🔍 Analyzing full chat history...' });
                     const response = await callGemini({
-                        model: 'gemini-1.5-flash',
+                        model: 'gemini-3.8-flash',
                         contents: `Here is a transcript of recent messages from this WhatsApp chat:\n\n${formattedHistory}\n\nPlease analyze the interaction. Summarize key topics, emotional tone, and main takeaways.`,
                     });
                     await sock.sendMessage(remoteJid, { text: response.text });
@@ -546,7 +551,7 @@ async function startBot() {
                     const buffer = await downloadMediaMessage(targetMsg, 'buffer', {});
                     const base64Image = buffer.toString('base64');
                     const response = await callGemini({
-                        model: 'gemini-1.5-flash',
+                        model: 'gemini-3.8-flash',
                         contents: [
                             { inlineData: { mimeType: 'image/jpeg', data: base64Image } },
                             { text: 'Describe what you see in this image in detail, including text, objects, and overall context.' }
@@ -624,7 +629,7 @@ async function startBot() {
             if (baseWord === 'trivia') {
                 try {
                     const prompt = "Generate a fun trivia question. Format strictly as:\nQUESTION: [question]\nA) [opt1]\nB) [opt2]\nC) [opt3]\nD) [opt4]\nANSWER: [A/B/C/D]";
-                    const response = await callGemini({ model: 'gemini-1.5-flash', contents: prompt });
+                    const response = await callGemini({ model: 'gemini-3.8-flash', contents: prompt });
                     const content = response.text;
                     const answerMatch = content.match(/ANSWER:\s*([A-D])/i);
                     const correctAnswer = answerMatch ? answerMatch[1].toUpperCase() : 'A';
@@ -688,7 +693,7 @@ async function startBot() {
                 }
                 try {
                     const response = await callGemini({
-                        model: 'gemini-1.5-flash',
+                        model: 'gemini-3.8-flash',
                         contents: `Translate the following statement strictly into ${args}. Only return the translation text.`,
                     });
                     await sock.sendMessage(remoteJid, { text: `🌐 *Translation:*\n${response.text}` });
