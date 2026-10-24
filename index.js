@@ -70,6 +70,7 @@ const activeTrivia = new Map();
 const userModes = new Map();
 const cooldowns = new Map();
 const messageStore = new Map();
+const todoLists = new Map();
 const MAX_BUFFER_SIZE = 25;
 let botSleeping = false;
 const startTime = Date.now();
@@ -217,7 +218,8 @@ async function startBot() {
                 'menu', 'help', 'commands', 'ai', 'talk', 'mode', 'imagine', 'match',
                 'football', 'tagall', 'hidetag', 'meme', 'summarize', 'analyze',
                 'analyzechat', 'describe', 'song', 'video', 'wiki',
-                'trivia', 'sticker', 'tts', 'tr', 'remind', 'search', 'calc', 'ping', 'status'
+                'trivia', 'sticker', 'tts', 'tr', 'remind', 'search', 'calc', 'ping', 'status',
+                'map', 'nav', 'weather', 'qr', 'todo', 'todos', 'cleartodos'
             ];
             const isCommand = commandKeywords.includes(baseWord) || lowerText === 'commands';
 
@@ -276,50 +278,43 @@ async function startBot() {
                 const menuText = `📖 *COMPLETE BOT COMMAND GUIDE* 📖\n` +
                     `⚡ *Powered by cold.era10*\n` +
                     `───────────────────────────\n\n` +
-                    `🧠 *AI & PERSONALITY COMMANDS*\n` +
-                    `• Direct DM Chat : Just text the bot directly with no prefix!\n` +
-                    `• !ai <prompt> : Explicitly ask Gemini a question.\n` +
-                    `  └ Example: !ai What are the main rules of basketball?\n` +
-                    `• !talk <prompt> : Get AI responses back as a Voice Note.\n` +
-                    `  └ Example: !talk Tell me a funny joke\n` +
-                    `• !analyze : Reply to any message to analyze tone & context.\n` +
-                    `• !analyzechat : Complete chat history analytics.\n` +
-                    `• !describe : Send/reply to a photo for AI vision inspection.\n` +
-                    `• !mode <persona> : Change AI tone (normal, friend, roast, tutor, hype).\n\n` +
-                    `🎨 *MEDIA & CREATIVE COMMANDS*\n` +
-                    `• !imagine <prompt> : Generate AI artwork from text.\n` +
-                    `  └ Example: !imagine futuristic sports car in space\n` +
-                    `• !song <title/artist> : Download MP3 audio.\n` +
-                    `  └ Example: !song Drake Passionfruit\n` +
-                    `• !video <title> : Download MP4 video.\n` +
-                    `  └ Example: !video Barcelona vs Real Madrid highlights\n` +
-                    `• !sticker : Send/reply to an image to convert to sticker.\n` +
-                    `• !meme <top | bottom> : Overlay meme text onto photos.\n` +
-                    `  └ Example: !meme When the code works | on the first try\n` +
-                    `• !tts <text> : Convert text to custom audio voice note.\n\n` +
-                    `⚽ *SPORTS & UTILITIES*\n` +
-                    `• !match <team> : Live scores & upcoming match status.\n` +
-                    `  └ Example: !match Barcelona\n` +
-                    `• !summarize : Reply to long text for a bullet point summary.\n` +
-                    `• !wiki <topic> : Fetch Wikipedia facts & summary.\n` +
-                    `• !tr <lang> <text> : Instant translation.\n` +
-                    `  └ Example: !tr Spanish Good morning my friend\n` +
-                    `• !remind <mins> <text> : Set a timer reminder notification.\n` +
-                    `  └ Example: !remind 10 Check the food in the oven\n` +
-                    `• !trivia : Play interactive quiz questions.\n` +
-                    `• !search <query> : Search saved chat logs.\n` +
-                    `• !calc <expr> : Fast math calculation engine.\n` +
-                    `  └ Example: !calc (450 * 2) / 5 + 10\n` +
-                    `• !ping / !status : Check bot uptime & key rotation status.\n\n` +
+                    `🧠 *AI-POWERED COMMANDS (Consumes API Quota)*\n` +
+                    `• Direct DM Chat : Text the bot directly (Friend Mode)\n` +
+                    `• !ai <prompt> : Ask Gemini a direct question\n` +
+                    `• !talk <prompt> : AI response as a Voice Note\n` +
+                    `• !analyze : Reply to message for tone & context analysis\n` +
+                    `• !analyzechat : Full chat history summary & analytics\n` +
+                    `• !describe : Send/reply to a photo for AI vision inspection\n` +
+                    `• !mode <persona> : Change AI tone (normal, friend, roast, tutor, hype)\n` +
+                    `• !summarize : Reply to text for bullet point summary\n` +
+                    `• !tr <lang> <text> : AI instant translation\n` +
+                    `• !match <team> : Live scores & team news via AI search\n` +
+                    `• !trivia : Generate AI quiz questions\n\n` +
+                    `⚡ *AI-FREE UTILITIES (Zero Quota / Unlimited)*\n` +
+                    `• !map <destination> : Instant GPS map & direction links\n` +
+                    `• !weather <city> : Real-time weather forecast lookup\n` +
+                    `• !qr <text/link> : Generate a scannable QR code image\n` +
+                    `• !todo <task> : Add a task to your chat to-do list\n` +
+                    `• !todos : View your active chat to-do list\n` +
+                    `• !cleartodos : Clear your chat to-do list\n` +
+                    `• !song <title> : Download MP3 audio (yt-dlp)\n` +
+                    `• !video <title> : Download MP4 video (yt-dlp)\n` +
+                    `• !wiki <topic> : Fetch Wikipedia summaries\n` +
+                    `• !sticker : Convert image to WhatsApp sticker\n` +
+                    `• !meme <top | bottom> : Create photo memes with text overlay\n` +
+                    `• !calc <expr> : Fast math evaluation engine\n` +
+                    `• !remind <mins> <text> : Timer reminder notification\n` +
+                    `• !search <query> : Search through local chat logs\n` +
+                    `• !ping / !status : Check bot uptime & key rotation slot\n\n` +
                     `👥 *GROUP TOOLS*\n` +
-                    `• !tagall <msg> : Mention all group members visibly.\n` +
-                    `• !hidetag <msg> : Send invisible mass ping notification.\n\n` +
+                    `• !tagall <msg> : Mention all group members (Visible)\n` +
+                    `• !hidetag <msg> : Hidden mass tag notification\n\n` +
                     `🔓 *AUTOMATION & CONTROLS*\n` +
-                    `• !Neymar : Sleep / Wake bot toggle.\n` +
-                    `• View Once Saver : Auto-captures View-Once media.\n` +
-                    `• Auto Status Viewer & Liker : Automatically views & likes contacts status (❤️).\n` +
-                    `• Anti-Delete Recovery : Auto-reposts deleted messages & media.\n` +
-                    `• Background Logger : Silently indexes chat activity.\n` +
+                    `• !Neymar : Sleep / Wake bot toggle\n` +
+                    `• View Once Saver : Auto-captures View-Once media\n` +
+                    `• Auto Status Viewer & Liker : Auto-views & likes statuses (❤️)\n` +
+                    `• Anti-Delete Recovery : Auto-reposts deleted messages\n` +
+                    `• Background Logger : Silently indexes chat activity\n` +
                     `───────────────────────────`;
                 await sock.sendMessage(remoteJid, { text: menuText });
                 continue;
@@ -338,6 +333,88 @@ async function startBot() {
                 } catch (err) {
                     await sock.sendMessage(remoteJid, { text: `❌ AI Error: ${err.message}` });
                 }
+            }
+
+            // COMMAND: map / nav (AI-free direct link generator)
+            if (baseWord === 'map' || baseWord === 'nav') {
+                const query = text.replace(/^[!]?(map|nav)\s*/i, '').trim();
+                if (!query) {
+                    await sock.sendMessage(remoteJid, { text: '⚠️ Please specify a destination!\nExample: `!map Johannesburg`' });
+                    continue;
+                }
+                const encoded = encodeURIComponent(query);
+                const mapSearchUrl = `https://www.google.com/maps/search/?api=1&query=${encoded}`;
+                const directionsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encoded}`;
+
+                await sock.sendMessage(remoteJid, { 
+                    text: `🗺️ *GPS & Navigation Finder*\n\n📍 *Destination:* ${query}\n\n🌐 *View on Map:* ${mapSearchUrl}\n🚗 *Get Directions:* ${directionsUrl}\n\n⚡ _Zero AI quota used!_` 
+                });
+                continue;
+            }
+
+            // COMMAND: weather (AI-free weather lookup)
+            if (baseWord === 'weather') {
+                const city = text.replace(/^[!]?weather\s*/i, '').trim();
+                if (!city) {
+                    await sock.sendMessage(remoteJid, { text: '⚠️ Please specify a city!\nExample: `!weather Bushbuckridge`' });
+                    continue;
+                }
+                try {
+                    const res = await fetch(`https://wttr.in/${encodeURIComponent(city)}?format=3`);
+                    const weatherText = await res.text();
+                    await sock.sendMessage(remoteJid, { text: `🌤️ *Weather Forecast*\n\n${weatherText.trim()}\n\n⚡ _Zero AI quota used!_` });
+                } catch (err) {
+                    await sock.sendMessage(remoteJid, { text: '❌ Error fetching weather data.' });
+                }
+                continue;
+            }
+
+            // COMMAND: qr (AI-free QR code generator)
+            if (baseWord === 'qr') {
+                const qrData = text.replace(/^[!]?qr\s*/i, '').trim();
+                if (!qrData) {
+                    await sock.sendMessage(remoteJid, { text: '⚠️ Please provide text or a link for the QR code!\nExample: `!qr https://google.com`' });
+                    continue;
+                }
+                try {
+                    const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(qrData)}`;
+                    await sock.sendMessage(remoteJid, { image: { url: qrUrl }, caption: `📱 *Generated QR Code*\nData: ${qrData}\n\n⚡ _Zero AI quota used!_` });
+                } catch (err) {
+                    await sock.sendMessage(remoteJid, { text: '❌ Error generating QR code.' });
+                }
+                continue;
+            }
+
+            // COMMAND: todo / todos / cleartodos
+            if (baseWord === 'todo') {
+                const task = text.replace(/^[!]?todo\s*/i, '').trim();
+                if (!task) {
+                    await sock.sendMessage(remoteJid, { text: '⚠️ Please specify a task!\nExample: `!todo Finish science homework`' });
+                    continue;
+                }
+                if (!todoLists.has(remoteJid)) todoLists.set(remoteJid, []);
+                const list = todoLists.get(remoteJid);
+                list.push(task);
+                await sock.sendMessage(remoteJid, { text: `✅ *Task Added (#${list.length}):*\n${task}\n\n_Type \`!todos\` to view your list._` });
+                continue;
+            }
+
+            if (baseWord === 'todos') {
+                const list = todoLists.get(remoteJid) || [];
+                if (list.length === 0) {
+                    await sock.sendMessage(remoteJid, { text: '📋 Your to-do list is empty! Add a task using `!todo <task>`.' });
+                    continue;
+                }
+                let responseText = `📋 *Your To-Do List:*\n\n` + list.map((t, index) => `${index + 1}. ${t}`).join('\n');
+                responseText += `\n\n_Type \`!cleartodos\` to clear the list._`;
+                await sock.sendMessage(remoteJid, { text: responseText });
+                continue;
+            }
+
+            if (baseWord === 'cleartodos') {
+                todoLists.set(remoteJid, []);
+                await sock.sendMessage(remoteJid, { text: '🗑️ Your to-do list has been cleared!' });
+                continue;
             }
 
             // COMMAND: talk
@@ -487,341 +564,5 @@ async function startBot() {
                 const quotedMsg = msgContent.extendedTextMessage?.contextInfo?.quotedMessage;
                 const isImage = msgContent.imageMessage || quotedMsg?.imageMessage;
                 if (!isImage) {
-                    await sock.sendMessage(remoteJid, { text: '⚠️ Send or reply to an image with meme Top Text | Bottom Text' });
-                    continue;
-                }
-                const args = text.replace(/^[!]?meme\s*/i, '').trim().split('|');
-                const topText = args[0] ? args[0].trim() : '';
-                const bottomText = args[1] ? args[1].trim() : '';
-                try {
-                    await sock.sendMessage(remoteJid, { text: '🤡 Creating meme...' });
-                    const targetMsg = msgContent.imageMessage ? msg : { message: quotedMsg, key: { remoteJid } };
-                    const buffer = await downloadMediaMessage(targetMsg, 'buffer', {});
-                    const inputPath = path.join(process.cwd(), `meme_in_${Date.now()}.jpg`);
-                    const outputPath = path.join(process.cwd(), `meme_out_${Date.now()}.jpg`);
-                    fs.writeFileSync(inputPath, buffer);
-                    const drawText = `drawtext=text='${topText.replace(/'/g, "\\'")}':fontcolor=white:fontsize=36:x=(w-text_w)/2:y=20:bordercolor=black:borderw=3,drawtext=text='${bottomText.replace(/'/g, "\\'")}':fontcolor=white:fontsize=36:x=(w-text_w)/2:y=h-th-20:bordercolor=black:borderw=3`;
-                    await runCommand(`ffmpeg -i "${inputPath}" -vf "${drawText}" "${outputPath}"`);
-                    if (fs.existsSync(outputPath)) {
-                        await sock.sendMessage(remoteJid, { image: { url: outputPath } });
-                        fs.unlinkSync(inputPath);
-                        fs.unlinkSync(outputPath);
-                    }
-                } catch (err) {
-                    await sock.sendMessage(remoteJid, { text: `❌ Meme Error: ${err.message}` });
-                }
-            }
-
-            // COMMAND: summarize
-            if (baseWord === 'summarize') {
-                const context = msgContent.extendedTextMessage?.contextInfo;
-                const quotedText = context?.quotedMessage?.conversation || context?.quotedMessage?.extendedTextMessage?.text;
-                if (!quotedText) {
-                    await sock.sendMessage(remoteJid, { text: 'Please reply to a long text message or thread with summarize.' });
-                    continue;
-                }
-                try {
-                    const response = await callGemini({
-                        model: 'gemini-1.5-flash',
-                        contents: `Summarize the following text into 3 clear bullet points:\n\n"${quotedText}"`,
-                    });
-                    await sock.sendMessage(remoteJid, { text: `📝 *Summary:*\n\n${response.text}` });
-                } catch (err) {
-                    await sock.sendMessage(remoteJid, { text: `❌ Summary Error: ${err.message}` });
-                }
-            }
-
-            // COMMAND: analyze & analyzechat
-            if (baseWord === 'analyze') {
-                const context = msgContent.extendedTextMessage?.contextInfo;
-                const quotedText = context?.quotedMessage?.conversation || context?.quotedMessage?.extendedTextMessage?.text;
-                if (!quotedText) {
-                    await sock.sendMessage(remoteJid, { text: 'Please reply to a message and type analyze.' });
-                    continue;
-                }
-                try {
-                    const response = await callGemini({
-                        model: 'gemini-1.5-flash',
-                        contents: `Analyze this message: "${quotedText}". Provide key insights, tone, and a brief summary.`,
-                    });
-                    await sock.sendMessage(remoteJid, { text: response.text });
-                } catch (err) {
-                    await sock.sendMessage(remoteJid, { text: `❌ Analysis Error: ${err.message}` });
-                }
-            }
-
-            if (baseWord === 'analyzechat') {
-                const buffer = chatBuffers.get(remoteJid) || [];
-                if (buffer.length < 2) {
-                    await sock.sendMessage(remoteJid, { text: '⚠️ Not enough chat history captured yet.' });
-                    continue;
-                }
-                const formattedHistory = buffer.map(m => `[${m.timestamp}] ${m.sender}: ${m.text}`).join('\n');
-                try {
-                    await sock.sendMessage(remoteJid, { text: '🔍 Analyzing full chat history...' });
-                    const response = await callGemini({
-                        model: 'gemini-1.5-flash',
-                        contents: `Here is a transcript of recent messages from this WhatsApp chat:\n\n${formattedHistory}\n\nPlease analyze the interaction. Summarize key topics, emotional tone, and main takeaways.`,
-                    });
-                    await sock.sendMessage(remoteJid, { text: response.text });
-                } catch (err) {
-                    await sock.sendMessage(remoteJid, { text: `❌ Chat Analysis Error: ${err.message}` });
-                }
-            }
-
-            // COMMAND: describe
-            if (baseWord === 'describe') {
-                const quotedMsg = msgContent.extendedTextMessage?.contextInfo?.quotedMessage;
-                const isImage = msgContent.imageMessage || quotedMsg?.imageMessage;
-                if (!isImage) {
-                    await sock.sendMessage(remoteJid, { text: '⚠️ Send or reply to an image with describe!' });
-                    continue;
-                }
-                try {
-                    await sock.sendMessage(remoteJid, { text: '👁️ Inspecting image...' });
-                    const targetMsg = msgContent.imageMessage ? msg : { message: quotedMsg, key: { remoteJid } };
-                    const buffer = await downloadMediaMessage(targetMsg, 'buffer', {});
-                    const base64Image = buffer.toString('base64');
-                    const response = await callGemini({
-                        model: 'gemini-1.5-flash',
-                        contents: [
-                            { inlineData: { mimeType: 'image/jpeg', data: base64Image } },
-                            { text: 'Describe what you see in this image in detail, including text, objects, and overall context.' }
-                        ]
-                    });
-                    await sock.sendMessage(remoteJid, { text: response.text });
-                } catch (err) {
-                    await sock.sendMessage(remoteJid, { text: `❌ Vision Error: ${err.message}` });
-                }
-            }
-
-            // COMMAND: song
-            if (baseWord === 'song') {
-                const query = text.replace(/^[!]?song\s*/i, '').trim();
-                if (!query) {
-                    await sock.sendMessage(remoteJid, { text: 'Please provide a song title!' });
-                    continue;
-                }
-                const outputPath = path.join(process.cwd(), `song_${Date.now()}.mp3`);
-                await sock.sendMessage(remoteJid, { text: `🎵 Downloading audio for: "${query}"...` });
-                try {
-                    await runCommand(`yt-dlp --extract-audio --audio-format mp3 -o "${outputPath}" "ytsearch1:${query}"`);
-                    if (fs.existsSync(outputPath)) {
-                        await sock.sendMessage(remoteJid, { audio: { url: outputPath }, mimetype: 'audio/mp4', fileName: `${query}.mp3` });
-                        fs.unlinkSync(outputPath);
-                    } else {
-                        await sock.sendMessage(remoteJid, { text: '❌ Failed to locate audio file.' });
-                    }
-                } catch (err) {
-                    await sock.sendMessage(remoteJid, { text: `❌ Download Error: ${err.message}` });
-                    if (fs.existsSync(outputPath)) fs.unlinkSync(outputPath);
-                }
-            }
-
-            // COMMAND: video
-            if (baseWord === 'video') {
-                const query = text.replace(/^[!]?video\s*/i, '').trim();
-                if (!query) {
-                    await sock.sendMessage(remoteJid, { text: 'Please provide a video title!' });
-                    continue;
-                }
-                const outputPath = path.join(process.cwd(), `video_${Date.now()}.mp4`);
-                await sock.sendMessage(remoteJid, { text: `🎥 Downloading video for: "${query}"...` });
-                try {
-                    await runCommand(`yt-dlp --extractor-args "youtube:player_client=android" -o "${outputPath}" "ytsearch1:${query}"`);
-                    if (fs.existsSync(outputPath)) {
-                        await sock.sendMessage(remoteJid, { video: { url: outputPath }, caption: `Here is your video for: ${query}` });
-                        fs.unlinkSync(outputPath);
-                    } else {
-                        await sock.sendMessage(remoteJid, { text: '❌ Failed to locate video file.' });
-                    }
-                } catch (err) {
-                    await sock.sendMessage(remoteJid, { text: `❌ Download Error: ${err.message}` });
-                    if (fs.existsSync(outputPath)) fs.unlinkSync(outputPath);
-                }
-            }
-
-            // COMMAND: wiki
-            if (baseWord === 'wiki') {
-                const query = text.replace(/^[!]?wiki\s*/i, '').trim();
-                if (!query) {
-                    await sock.sendMessage(remoteJid, { text: 'Please specify a topic!' });
-                    continue;
-                }
-                try {
-                    const res = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(query)}`);
-                    const data = await res.json();
-                    if (data.extract) {
-                        await sock.sendMessage(remoteJid, { text: `📖 *Wikipedia: ${data.title}*\n\n${data.extract}\n\n🔗 ${data.content_urls?.desktop?.page || ''}` });
-                    } else {
-                        await sock.sendMessage(remoteJid, { text: '❌ No Wikipedia article found.' });
-                    }
-                } catch (err) {
-                    await sock.sendMessage(remoteJid, { text: '❌ Error fetching Wikipedia entry.' });
-                }
-            }
-
-            // COMMAND: trivia
-            if (baseWord === 'trivia') {
-                try {
-                    const prompt = "Generate a fun trivia question. Format strictly as:\nQUESTION: [question]\nA) [opt1]\nB) [opt2]\nC) [opt3]\nD) [opt4]\nANSWER: [A/B/C/D]";
-                    const response = await callGemini({ model: 'gemini-1.5-flash', contents: prompt });
-                    const content = response.text;
-                    const answerMatch = content.match(/ANSWER:\s*([A-D])/i);
-                    const correctAnswer = answerMatch ? answerMatch[1].toUpperCase() : 'A';
-                    activeTrivia.set(remoteJid, correctAnswer);
-                    await sock.sendMessage(remoteJid, { text: `🧠 *Trivia Time!*\n\n${content}\n\n_Reply with A, B, C, or D to answer!_` });
-                } catch (err) {
-                    await sock.sendMessage(remoteJid, { text: '❌ Error generating trivia.' });
-                }
-            }
-
-            // COMMAND: sticker
-            if (baseWord === 'sticker') {
-                const quotedMsg = msgContent.extendedTextMessage?.contextInfo?.quotedMessage;
-                const isImage = msgContent.imageMessage || quotedMsg?.imageMessage;
-                if (!isImage) {
-                    await sock.sendMessage(remoteJid, { text: '⚠️ Send or reply to an image with sticker!' });
-                    continue;
-                }
-                try {
-                    await sock.sendMessage(remoteJid, { text: '🎨 Converting image to sticker...' });
-                    const targetMsg = msgContent.imageMessage ? msg : { message: quotedMsg, key: { remoteJid } };
-                    const buffer = await downloadMediaMessage(targetMsg, 'buffer', {});
-                    const inputPath = path.join(process.cwd(), `img_${Date.now()}.jpg`);
-                    const outputPath = path.join(process.cwd(), `sticker_${Date.now()}.webp`);
-                    fs.writeFileSync(inputPath, buffer);
-                    await runCommand(`ffmpeg -i "${inputPath}" -vcodec libwebp -vf "scale=512:512:force_original_aspect_ratio=decrease,format=rgba,pad=512:512:(ow-ih)/2:(oh-ih)/2:color=#00000000" -q:v 60 "${outputPath}"`);
-                    if (fs.existsSync(outputPath)) {
-                        await sock.sendMessage(remoteJid, { sticker: { url: outputPath } });
-                        fs.unlinkSync(inputPath);
-                        fs.unlinkSync(outputPath);
-                    }
-                } catch (err) {
-                    await sock.sendMessage(remoteJid, { text: `❌ Sticker Error: ${err.message}` });
-                }
-            }
-
-            // COMMAND: tts
-            if (baseWord === 'tts') {
-                const prompt = text.replace(/^[!]?tts\s*/i, '').trim();
-                if (!prompt) {
-                    await sock.sendMessage(remoteJid, { text: 'Please provide text!' });
-                    continue;
-                }
-                try {
-                    await sock.sendMessage(remoteJid, { text: '🎙️ Generating voice note...' });
-                    const audioPath = path.join(process.cwd(), `voice_${Date.now()}.mp3`);
-                    const pyScript = `from gtts import gTTS; tts = gTTS(text='${prompt.replace(/'/g, "\\'")}', lang='en'); tts.save('${audioPath}')`;
-                    await runCommand(`python -c "${pyScript}"`);
-                    if (fs.existsSync(audioPath)) {
-                        await sock.sendMessage(remoteJid, { audio: { url: audioPath }, mimetype: 'audio/mp4', ptt: true });
-                        fs.unlinkSync(audioPath);
-                    }
-                } catch (err) {
-                    await sock.sendMessage(remoteJid, { text: `❌ TTS Error: ${err.message}` });
-                }
-            }
-
-            // COMMAND: tr
-            if (baseWord === 'tr') {
-                const args = text.replace(/^[!]?tr\s*/i, '').trim();
-                if (!args) {
-                    await sock.sendMessage(remoteJid, { text: 'Usage: tr <language> <text>' });
-                    continue;
-                }
-                try {
-                    const response = await callGemini({
-                        model: 'gemini-1.5-flash',
-                        contents: `Translate the following statement strictly into ${args}. Only return the translation text.`,
-                    });
-                    await sock.sendMessage(remoteJid, { text: `🌐 *Translation:*\n${response.text}` });
-                } catch (err) {
-                    await sock.sendMessage(remoteJid, { text: `❌ Translation Error: ${err.message}` });
-                }
-            }
-
-            // COMMAND: remind
-            if (baseWord === 'remind') {
-                const body = text.replace(/^[!]?remind\s*/i, '').trim();
-                const parts = body.split(' ');
-                const minutes = parseInt(parts[0]);
-                const reminderMsg = parts.slice(1).join(' ');
-                if (isNaN(minutes) || !reminderMsg) {
-                    await sock.sendMessage(remoteJid, { text: 'Usage: remind <minutes> <message>' });
-                    continue;
-                }
-                await sock.sendMessage(remoteJid, { text: `⏰ Reminder set for ${minutes} minute(s) from now!` });
-                setTimeout(async () => {
-                    await sock.sendMessage(remoteJid, { text: `🔔 *REMINDER:* ${reminderMsg}` });
-                }, minutes * 60 * 1000);
-            }
-
-            // COMMAND: search
-            if (baseWord === 'search') {
-                const query = text.replace(/^[!]?search\s*/i, '').trim();
-                if (!query) {
-                    await sock.sendMessage(remoteJid, { text: '⚠️ Please provide a search term.' });
-                    continue;
-                }
-                if (!fs.existsSync('chats-log.json')) {
-                    await sock.sendMessage(remoteJid, { text: '📂 No chat logs found yet.' });
-                    continue;
-                }
-                try {
-                    let logs = JSON.parse(fs.readFileSync('chats-log.json', 'utf8'));
-                    let results = logs.filter(entry => entry.content.toLowerCase().includes(query.toLowerCase()) || entry.sender.toLowerCase().includes(query.toLowerCase()));
-                    let responseText = results.slice(-10).map(r => `[${r.date} ${r.time}] Chat: ${r.chat} | ${r.sender}: ${r.content}`).join('\n\n');
-                    await sock.sendMessage(remoteJid, { text: responseText ? `🔍 *Search Results for "${query}":*\n\n${responseText}` : `❌ No matching messages found for "${query}".` });
-                } catch (e) {
-                    await sock.sendMessage(remoteJid, { text: '⚠️ Error reading local log file.' });
-                }
-                continue;
-            }
-        }
-    });
-
-    sock.ev.on('messages.update', async (updates) => {
-        for (const update of updates) {
-            if (update.update && update.update.message === null) {
-                const deletedKeyId = update.key.id;
-                const originalMsg = messageStore.get(deletedKeyId);
-                if (originalMsg) {
-                    try {
-                        await sock.sendMessage(originalMsg.remoteJid, { 
-                            text: `🚨 *ANTI-DELETE RECOVERY*\n👤 *Sender:* ${originalMsg.sender}\n⏰ *Time:* ${originalMsg.timestamp}\n\nDeleted message was:\n"${originalMsg.message.conversation || originalMsg.message.extendedTextMessage?.text || '[Media/Attachment]'}"` 
-                        });
-                    } catch (e) {
-                        console.error('Anti-delete repost error:', e);
-                    }
-                }
-            }
-        }
-    });
-}
-
-function logMessageToDisk(chatType, senderName, messageText) {
-    const logFile = 'chats-log.json';
-    let logs = [];
-    if (fs.existsSync(logFile)) {
-        try {
-            logs = JSON.parse(fs.readFileSync(logFile, 'utf8'));
-        } catch (e) {
-            logs = [];
-        }
-    }
-    logs.push({
-        date: new Date().toLocaleDateString(),
-        time: new Date().toLocaleTimeString(),
-        chat: chatType,
-        sender: senderName,
-        content: messageText
-    });
-    if (logs.length > 1500) {
-        logs.shift();
-    }
-    fs.writeFileSync(logFile, JSON.stringify(logs, null, 2));
-}
-
-startBot();
+                    await sock.sendMessage(remoteJid, { text: '⚠️ Send or reply to an image with meme Top Text | Bottom
 
