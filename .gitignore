@@ -1,0 +1,5 @@
+node_modules/
+*.mp4
+*.part
+.env
+chats-log.json

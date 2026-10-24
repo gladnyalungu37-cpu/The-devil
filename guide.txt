@@ -1,0 +1,53 @@
+📖 *COMPLETE BOT COMMAND GUIDE* 📖
+⚡ *Powered by cold.era10*
+───────────────────────────
+
+🧠 *AI & PERSONALITY COMMANDS*
+• Direct DM Chat : Just text the bot directly with no prefix!
+• !ai <prompt> : Explicitly ask Gemini a question.
+  └ Example: !ai What are the main rules of basketball?
+• !talk <prompt> : Get AI responses back as a Voice Note.
+  └ Example: !talk Tell me a funny joke
+• !analyze : Reply to any message to analyze tone & context.
+• !analyzechat : Complete chat history analytics.
+• !describe : Send/reply to a photo for AI vision inspection.
+• !mode <persona> : Change AI tone (normal, friend, roast, tutor, hype).
+
+🎨 *MEDIA & CREATIVE COMMANDS*
+• !imagine <prompt> : Generate AI artwork from text.
+  └ Example: !imagine futuristic sports car in space
+• !song <title/artist> : Download MP3 audio.
+  └ Example: !song Drake Passionfruit
+• !video <title> : Download MP4 video.
+  └ Example: !video Barcelona vs Real Madrid highlights
+• !sticker : Send/reply to an image to convert to sticker.
+• !meme <top | bottom> : Overlay meme text onto photos.
+  └ Example: !meme When the code works | on the first try
+• !tts <text> : Convert text to custom audio voice note.
+
+⚽ *SPORTS & UTILITIES*
+• !match <team> : Live scores & upcoming match status.
+  └ Example: !match Barcelona
+• !summarize : Reply to long text for a bullet point summary.
+• !wiki <topic> : Fetch Wikipedia facts & summary.
+• !tr <lang> <text> : Instant translation.
+  └ Example: !tr Spanish Good morning my friend
+• !remind <mins> <text> : Set a timer reminder notification.
+  └ Example: !remind 10 Check the food in the oven
+• !trivia : Play interactive quiz questions.
+• !search <query> : Search saved chat logs.
+• !calc <expr> : Fast math calculation engine.
+  └ Example: !calc (450 * 2) / 5 + 10
+• !ping / !status : Check bot uptime & key rotation status.
+
+👥 *GROUP TOOLS*
+• !tagall <msg> : Mention all group members visibly.
+• !hidetag <msg> : Send invisible mass ping notification.
+
+🔓 *AUTOMATION & CONTROLS*
+• !Neymar : Sleep / Wake bot toggle.
+• View Once Saver : Auto-captures View-Once media.
+• Auto Status Viewer & Liker : Automatically views & likes contacts status.
+• Anti-Delete Recovery : Auto-reposts deleted messages & media.
+• Background Logger : Silently indexes chat activity.
+───────────────────────────

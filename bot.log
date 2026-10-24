@@ -1,0 +1,564 @@
+{"level":30,"time":"2026-10-24T07:38:11.195Z","pid":22175,"hostname":"localhost","class":"baileys","browser":["Ubuntu","Chrome","22.04.4"],"helloMsg":{"clientHello":{"ephemeral":"+FqdpYJajnkdVZz5QhnNW0K0baTufVB+RxgatnXHrk8="}},"msg":"connected to WA"}
+{"level":30,"time":"2026-10-24T07:38:11.548Z","pid":22175,"hostname":"localhost","class":"baileys","node":{"username":"27665989026","passive":false,"userAgent":{"platform":"WEB","appVersion":{"primary":2,"secondary":3000,"tertiary":1043857760},"mcc":"000","mnc":"000","osVersion":"0.1","device":"Desktop","osBuildNumber":"0.1","releaseChannel":"RELEASE","localeLanguageIso6391":"en","localeCountryIso31661Alpha2":"US"},"webInfo":{"webSubPlatform":"WEB_BROWSER"},"connectType":"WIFI_UNKNOWN","connectReason":"USER_ACTIVATED","device":8,"pull":true},"msg":"logging in..."}
+{"level":30,"time":"2026-10-24T07:38:12.469Z","pid":22175,"hostname":"localhost","class":"baileys","msg":"24 pre-keys found on server"}
+{"level":30,"time":"2026-10-24T07:38:12.493Z","pid":22175,"hostname":"localhost","class":"baileys","msg":"offline preview received"}
+{"level":30,"time":"2026-10-24T07:38:12.906Z","pid":22175,"hostname":"localhost","class":"baileys","msg":"opened connection to WA"}
+
+✅ Ultimate WhatsApp AI Bot (Powered by cold.era10) is active with Multi-Key Rotation!
+
+{"level":30,"time":"2026-10-24T07:38:12.951Z","pid":22175,"hostname":"localhost","class":"baileys","msg":"handled 10 offline messages/notifications"}
+{"level":30,"time":"2026-10-24T07:38:13.096Z","pid":22175,"hostname":"localhost","class":"baileys","msg":"Connection is now AwaitingInitialSync, buffering events"}
+{"level":30,"time":"2026-10-24T07:38:13.097Z","pid":22175,"hostname":"localhost","class":"baileys","msg":"History sync is disabled by config, not waiting for notification. Transitioning to Online."}
+Failed to decrypt message with any known session...
+Session error:Error: Bad MAC Error: Bad MAC
+    at Object.verifyMAC (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/crypto.js:87:15)
+    at SessionCipher.doDecryptWhisperMessage (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:250:16)
+    at async SessionCipher.decryptWithSessions (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:147:29)
+    at async 28978798686364.0 [as awaitable] (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:171:28)
+    at async _asyncQueueExecutor (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/queue_job.js:20:29)
+Session error:Error: Bad MAC Error: Bad MAC
+    at Object.verifyMAC (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/crypto.js:87:15)
+    at SessionCipher.doDecryptWhisperMessage (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:250:16)
+    at async SessionCipher.decryptWithSessions (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:147:29)
+    at async 28978798686364.0 [as awaitable] (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:171:28)
+    at async _asyncQueueExecutor (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/queue_job.js:20:29)
+Session error:MessageCounterError: Key used already or never filled MessageCounterError: Key used already or never filled
+    at SessionCipher.doDecryptWhisperMessage (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:236:19)
+    at SessionCipher.decryptWithSessions (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:147:40)
+    at async 28978798686364.0 [as awaitable] (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:171:28)
+    at async _asyncQueueExecutor (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/queue_job.js:20:29)
+Session error:Error: Bad MAC Error: Bad MAC
+    at Object.verifyMAC (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/crypto.js:87:15)
+    at SessionCipher.doDecryptWhisperMessage (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:250:16)
+    at async SessionCipher.decryptWithSessions (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:147:29)
+    at async 28978798686364.0 [as awaitable] (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:171:28)
+    at async _asyncQueueExecutor (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/queue_job.js:20:29)
+Session error:Error: Bad MAC Error: Bad MAC
+    at Object.verifyMAC (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/crypto.js:87:15)
+    at SessionCipher.doDecryptWhisperMessage (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:250:16)
+    at async SessionCipher.decryptWithSessions (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:147:29)
+    at async 28978798686364.0 [as awaitable] (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:171:28)
+    at async _asyncQueueExecutor (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/queue_job.js:20:29)
+Session error:Error: Bad MAC Error: Bad MAC
+    at Object.verifyMAC (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/crypto.js:87:15)
+    at SessionCipher.doDecryptWhisperMessage (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:250:16)
+    at async SessionCipher.decryptWithSessions (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:147:29)
+    at async 28978798686364.0 [as awaitable] (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:171:28)
+    at async _asyncQueueExecutor (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/queue_job.js:20:29)
+Session error:Error: Bad MAC Error: Bad MAC
+    at Object.verifyMAC (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/crypto.js:87:15)
+    at SessionCipher.doDecryptWhisperMessage (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:250:16)
+    at async SessionCipher.decryptWithSessions (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:147:29)
+    at async 28978798686364.0 [as awaitable] (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:171:28)
+    at async _asyncQueueExecutor (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/queue_job.js:20:29)
+Session error:Error: Bad MAC Error: Bad MAC
+    at Object.verifyMAC (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/crypto.js:87:15)
+    at SessionCipher.doDecryptWhisperMessage (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:250:16)
+    at async SessionCipher.decryptWithSessions (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:147:29)
+    at async 28978798686364.0 [as awaitable] (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:171:28)
+    at async _asyncQueueExecutor (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/queue_job.js:20:29)
+Session error:Error: Bad MAC Error: Bad MAC
+    at Object.verifyMAC (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/crypto.js:87:15)
+    at SessionCipher.doDecryptWhisperMessage (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:250:16)
+    at async SessionCipher.decryptWithSessions (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:147:29)
+    at async 28978798686364.0 [as awaitable] (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:171:28)
+    at async _asyncQueueExecutor (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/queue_job.js:20:29)
+Session error:Error: Bad MAC Error: Bad MAC
+    at Object.verifyMAC (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/crypto.js:87:15)
+    at SessionCipher.doDecryptWhisperMessage (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:250:16)
+    at async SessionCipher.decryptWithSessions (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:147:29)
+    at async 28978798686364.0 [as awaitable] (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:171:28)
+    at async _asyncQueueExecutor (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/queue_job.js:20:29)
+Session error:Error: Bad MAC Error: Bad MAC
+    at Object.verifyMAC (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/crypto.js:87:15)
+    at SessionCipher.doDecryptWhisperMessage (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:250:16)
+    at async SessionCipher.decryptWithSessions (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:147:29)
+    at async 28978798686364.0 [as awaitable] (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:171:28)
+    at async _asyncQueueExecutor (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/queue_job.js:20:29)
+Session error:Error: Bad MAC Error: Bad MAC
+    at Object.verifyMAC (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/crypto.js:87:15)
+    at SessionCipher.doDecryptWhisperMessage (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:250:16)
+    at async SessionCipher.decryptWithSessions (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:147:29)
+    at async 28978798686364.0 [as awaitable] (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:171:28)
+    at async _asyncQueueExecutor (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/queue_job.js:20:29)
+Session error:Error: Bad MAC Error: Bad MAC
+    at Object.verifyMAC (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/crypto.js:87:15)
+    at SessionCipher.doDecryptWhisperMessage (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:250:16)
+    at async SessionCipher.decryptWithSessions (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:147:29)
+    at async 28978798686364.0 [as awaitable] (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:171:28)
+    at async _asyncQueueExecutor (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/queue_job.js:20:29)
+Session error:Error: Bad MAC Error: Bad MAC
+    at Object.verifyMAC (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/crypto.js:87:15)
+    at SessionCipher.doDecryptWhisperMessage (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:250:16)
+    at async SessionCipher.decryptWithSessions (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:147:29)
+    at async 28978798686364.0 [as awaitable] (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:171:28)
+    at async _asyncQueueExecutor (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/queue_job.js:20:29)
+{"level":50,"time":"2026-10-24T07:38:13.263Z","pid":22175,"hostname":"localhost","class":"baileys","key":{"remoteJid":"271060184342730@lid","fromMe":true,"id":"AC74DD665016510C356B95C5AE7D77D9"},"err":{"type":"SessionError","message":"No matching sessions found for message","stack":"SessionError: No matching sessions found for message\n    at SessionCipher.decryptWithSessions (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:161:15)\n    at async 28978798686364.0 [as awaitable] (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:171:28)\n    at async _asyncQueueExecutor (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/queue_job.js:20:29)","name":"SessionError"},"msg":"failed to decrypt message"}
+Failed to decrypt message with any known session...
+Session error:Error: Bad MAC Error: Bad MAC
+    at Object.verifyMAC (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/crypto.js:87:15)
+    at SessionCipher.doDecryptWhisperMessage (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:250:16)
+    at async SessionCipher.decryptWithSessions (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:147:29)
+    at async 28978798686364.0 [as awaitable] (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:171:28)
+    at async _asyncQueueExecutor (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/queue_job.js:20:29)
+Session error:Error: Bad MAC Error: Bad MAC
+    at Object.verifyMAC (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/crypto.js:87:15)
+    at SessionCipher.doDecryptWhisperMessage (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:250:16)
+    at async SessionCipher.decryptWithSessions (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:147:29)
+    at async 28978798686364.0 [as awaitable] (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:171:28)
+    at async _asyncQueueExecutor (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/queue_job.js:20:29)
+Session error:MessageCounterError: Key used already or never filled MessageCounterError: Key used already or never filled
+    at SessionCipher.doDecryptWhisperMessage (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:236:19)
+    at SessionCipher.decryptWithSessions (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:147:40)
+    at async 28978798686364.0 [as awaitable] (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:171:28)
+    at async _asyncQueueExecutor (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/queue_job.js:20:29)
+Session error:Error: Bad MAC Error: Bad MAC
+    at Object.verifyMAC (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/crypto.js:87:15)
+    at SessionCipher.doDecryptWhisperMessage (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:250:16)
+    at async SessionCipher.decryptWithSessions (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:147:29)
+    at async 28978798686364.0 [as awaitable] (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:171:28)
+    at async _asyncQueueExecutor (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/queue_job.js:20:29)
+Session error:Error: Bad MAC Error: Bad MAC
+    at Object.verifyMAC (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/crypto.js:87:15)
+    at SessionCipher.doDecryptWhisperMessage (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:250:16)
+    at async SessionCipher.decryptWithSessions (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:147:29)
+    at async 28978798686364.0 [as awaitable] (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:171:28)
+    at async _asyncQueueExecutor (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/queue_job.js:20:29)
+Session error:Error: Bad MAC Error: Bad MAC
+    at Object.verifyMAC (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/crypto.js:87:15)
+    at SessionCipher.doDecryptWhisperMessage (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:250:16)
+    at async SessionCipher.decryptWithSessions (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:147:29)
+    at async 28978798686364.0 [as awaitable] (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:171:28)
+    at async _asyncQueueExecutor (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/queue_job.js:20:29)
+Session error:Error: Bad MAC Error: Bad MAC
+    at Object.verifyMAC (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/crypto.js:87:15)
+    at SessionCipher.doDecryptWhisperMessage (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:250:16)
+    at async SessionCipher.decryptWithSessions (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:147:29)
+    at async 28978798686364.0 [as awaitable] (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:171:28)
+    at async _asyncQueueExecutor (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/queue_job.js:20:29)
+Session error:Error: Bad MAC Error: Bad MAC
+    at Object.verifyMAC (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/crypto.js:87:15)
+    at SessionCipher.doDecryptWhisperMessage (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:250:16)
+    at async SessionCipher.decryptWithSessions (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:147:29)
+    at async 28978798686364.0 [as awaitable] (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:171:28)
+    at async _asyncQueueExecutor (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/queue_job.js:20:29)
+Session error:Error: Bad MAC Error: Bad MAC
+    at Object.verifyMAC (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/crypto.js:87:15)
+    at SessionCipher.doDecryptWhisperMessage (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:250:16)
+    at async SessionCipher.decryptWithSessions (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:147:29)
+    at async 28978798686364.0 [as awaitable] (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:171:28)
+    at async _asyncQueueExecutor (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/queue_job.js:20:29)
+Session error:Error: Bad MAC Error: Bad MAC
+    at Object.verifyMAC (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/crypto.js:87:15)
+    at SessionCipher.doDecryptWhisperMessage (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:250:16)
+    at async SessionCipher.decryptWithSessions (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:147:29)
+    at async 28978798686364.0 [as awaitable] (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:171:28)
+    at async _asyncQueueExecutor (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/queue_job.js:20:29)
+Session error:Error: Bad MAC Error: Bad MAC
+    at Object.verifyMAC (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/crypto.js:87:15)
+    at SessionCipher.doDecryptWhisperMessage (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:250:16)
+    at async SessionCipher.decryptWithSessions (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:147:29)
+    at async 28978798686364.0 [as awaitable] (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:171:28)
+    at async _asyncQueueExecutor (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/queue_job.js:20:29)
+Session error:Error: Bad MAC Error: Bad MAC
+    at Object.verifyMAC (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/crypto.js:87:15)
+    at SessionCipher.doDecryptWhisperMessage (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:250:16)
+    at async SessionCipher.decryptWithSessions (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:147:29)
+    at async 28978798686364.0 [as awaitable] (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:171:28)
+    at async _asyncQueueExecutor (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/queue_job.js:20:29)
+Session error:Error: Bad MAC Error: Bad MAC
+    at Object.verifyMAC (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/crypto.js:87:15)
+    at SessionCipher.doDecryptWhisperMessage (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:250:16)
+    at async SessionCipher.decryptWithSessions (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:147:29)
+    at async 28978798686364.0 [as awaitable] (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:171:28)
+    at async _asyncQueueExecutor (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/queue_job.js:20:29)
+Session error:Error: Bad MAC Error: Bad MAC
+    at Object.verifyMAC (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/crypto.js:87:15)
+    at SessionCipher.doDecryptWhisperMessage (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:250:16)
+    at async SessionCipher.decryptWithSessions (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:147:29)
+    at async 28978798686364.0 [as awaitable] (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:171:28)
+    at async _asyncQueueExecutor (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/queue_job.js:20:29)
+{"level":50,"time":"2026-10-24T07:38:13.342Z","pid":22175,"hostname":"localhost","class":"baileys","key":{"remoteJid":"271060184342730@lid","fromMe":true,"id":"ACBE6102E2BF1CDD33533D5F39BD8BA7"},"err":{"type":"SessionError","message":"No matching sessions found for message","stack":"SessionError: No matching sessions found for message\n    at SessionCipher.decryptWithSessions (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:161:15)\n    at async 28978798686364.0 [as awaitable] (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:171:28)\n    at async _asyncQueueExecutor (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/queue_job.js:20:29)","name":"SessionError"},"msg":"failed to decrypt message"}
+⚠️ API Key [Index 0] hit quota/limit or failed: {"error":{"code":404,"message":"models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.","status":"NOT_FOUND"}}. Rotating...
+⚠️ API Key [Index 1] hit quota/limit or failed: {"error":{"code":404,"message":"models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.","status":"NOT_FOUND"}}. Rotating...
+⚠️ API Key [Index 2] hit quota/limit or failed: {"error":{"code":404,"message":"models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.","status":"NOT_FOUND"}}. Rotating...
+⚠️ API Key [Index 3] hit quota/limit or failed: {"error":{"code":404,"message":"models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.","status":"NOT_FOUND"}}. Rotating...
+Auto-reply error: Error: All Gemini API keys have exhausted their daily quotas or failed.
+    at callGemini (file:///data/data/com.termux/files/home/whatsapp-bot/index.js:35:23)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async EventEmitter.<anonymous> (file:///data/data/com.termux/files/home/whatsapp-bot/index.js:212:38)
+⚠️ API Key [Index 0] hit quota/limit or failed: {"error":{"code":404,"message":"models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.","status":"NOT_FOUND"}}. Rotating...
+⚠️ API Key [Index 1] hit quota/limit or failed: {"error":{"code":404,"message":"models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.","status":"NOT_FOUND"}}. Rotating...
+{"level":30,"time":"2026-10-24T07:38:17.639Z","pid":22175,"hostname":"localhost","class":"baileys","msgAttrs":{"from":"120363426227027438@newsletter","type":"text","edit":"8","id":"ACB0130B8850914C0E95407C85CC1181","sts":"1792823567533465","offline":"2","server_id":"782","t":"1792823566"},"retryCount":1,"msg":"sent retry receipt"}
+⚠️ API Key [Index 2] hit quota/limit or failed: {"error":{"code":404,"message":"models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.","status":"NOT_FOUND"}}. Rotating...
+⚠️ API Key [Index 3] hit quota/limit or failed: {"error":{"code":404,"message":"models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.","status":"NOT_FOUND"}}. Rotating...
+Auto-reply error: Error: All Gemini API keys have exhausted their daily quotas or failed.
+    at callGemini (file:///data/data/com.termux/files/home/whatsapp-bot/index.js:35:23)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async EventEmitter.<anonymous> (file:///data/data/com.termux/files/home/whatsapp-bot/index.js:212:38)
+Closing session: SessionEntry {
+  _chains: {
+    'BYSW+S6CPV0uD4WmcMtotj6vMaQ4CGajTQBrJysB8pww': { chainKey: [Object], chainType: 1, messageKeys: {} }
+  },
+  registrationId: 286454376,
+  currentRatchet: {
+    ephemeralKeyPair: {
+      pubKey: <Buffer 05 84 96 f9 2e 82 3d 5d 2e 0f 85 a6 70 cb 68 b6 3e af 31 a4 38 08 66 a3 4d 00 6b 27 2b 01 f2 9c 30>,
+      privKey: <Buffer c0 24 b2 d2 e3 bb 76 71 20 34 b8 8f 62 65 70 14 fa 57 d3 d1 9f 39 63 4b 90 c6 7b 5e 3f db 7d 46>
+    },
+    lastRemoteEphemeralKey: <Buffer 05 62 8e d6 5f b0 25 0b 51 12 7f d5 04 df 65 f8 6f e2 f1 57 81 14 41 b9 b1 01 79 31 a9 a8 f0 27 65>,
+    previousCounter: 0,
+    rootKey: <Buffer cc 3a 2e 16 d2 5e 1f 55 c2 56 66 d7 2e a7 18 93 3c 35 1c e6 5a fa e7 6d 33 41 52 32 3e de 5f a3>
+  },
+  indexInfo: {
+    baseKey: <Buffer 05 4a 68 42 0b 1c c6 0a 36 75 b4 44 bd 1d e0 ff 92 8f 82 1f de af 3b 52 00 07 ca 1e 05 57 3a 77 15>,
+    baseKeyType: 1,
+    closed: -1,
+    used: 1792826419819,
+    created: 1792826419819,
+    remoteIdentityKey: <Buffer 05 72 c9 f9 e7 1b 12 6c 8b 6d b8 2f 32 24 a6 a7 af 1d 81 27 60 fe b0 0c 08 3f b3 af e0 66 7d c1 03>
+  },
+  pendingPreKey: {
+    signedKeyId: 8927017,
+    baseKey: <Buffer 05 4a 68 42 0b 1c c6 0a 36 75 b4 44 bd 1d e0 ff 92 8f 82 1f de af 3b 52 00 07 ca 1e 05 57 3a 77 15>,
+    preKeyId: 6686898
+  }
+}
+{"level":30,"time":"2026-10-24T07:38:22.917Z","pid":22175,"hostname":"localhost","class":"baileys","msgAttrs":{"from":"120363426227027438@newsletter","type":"text","edit":"8","id":"AC45860FB9FF631C064951C5EF77B90F","sts":"1792823567833990","offline":"2","server_id":"781","t":"1792823566"},"retryCount":1,"msg":"sent retry receipt"}
+Closing session: SessionEntry {
+  _chains: {
+    'BaSntsphqB2fAIjJITC3HWH9CPTgtAaOxZArwzyJA39+': { chainKey: [Object], chainType: 1, messageKeys: {} }
+  },
+  registrationId: 286454376,
+  currentRatchet: {
+    ephemeralKeyPair: {
+      pubKey: <Buffer 05 a4 a7 b6 ca 61 a8 1d 9f 00 88 c9 21 30 b7 1d 61 fd 08 f4 e0 b4 06 8e c5 90 2b c3 3c 89 03 7f 7e>,
+      privKey: <Buffer 50 65 16 af be 93 ee c4 2e 95 a4 1b 3e 21 2d 8d 41 1e 6e 9f 4d e5 a6 de cc 7e 7d 19 37 07 55 59>
+    },
+    lastRemoteEphemeralKey: <Buffer 05 62 8e d6 5f b0 25 0b 51 12 7f d5 04 df 65 f8 6f e2 f1 57 81 14 41 b9 b1 01 79 31 a9 a8 f0 27 65>,
+    previousCounter: 0,
+    rootKey: <Buffer b0 d7 2b b6 cd 31 91 81 7b 45 8d 01 59 58 79 fe 15 b2 38 99 4c 25 aa 41 84 5c 1f 7f ef 93 e9 3a>
+  },
+  indexInfo: {
+    baseKey: <Buffer 05 5f 36 bc 9d 03 bc 23 10 7c 58 03 ba 84 c0 3a a7 83 d3 de 9f ee fe a0 83 8e 20 c5 64 62 8b 49 33>,
+    baseKeyType: 1,
+    closed: -1,
+    used: 1792827500308,
+    created: 1792827500308,
+    remoteIdentityKey: <Buffer 05 72 c9 f9 e7 1b 12 6c 8b 6d b8 2f 32 24 a6 a7 af 1d 81 27 60 fe b0 0c 08 3f b3 af e0 66 7d c1 03>
+  },
+  pendingPreKey: {
+    signedKeyId: 8927017,
+    baseKey: <Buffer 05 5f 36 bc 9d 03 bc 23 10 7c 58 03 ba 84 c0 3a a7 83 d3 de 9f ee fe a0 83 8e 20 c5 64 62 8b 49 33>,
+    preKeyId: 6686899
+  }
+}
+{"level":30,"time":"2026-10-24T07:38:28.192Z","pid":22175,"hostname":"localhost","class":"baileys","msgAttrs":{"from":"28978798686364@lid","type":"text","id":"AC74DD665016510C356B95C5AE7D77D9","sts":"1792826378220526","offline":"1","recipient":"271060184342730@lid","notify":"vuyani mbenenge","peer_recipient_pn":"27816365527@s.whatsapp.net","t":"1792826378"},"retryCount":1,"msg":"sent retry receipt"}
+Closing session: SessionEntry {
+  _chains: {
+    'BTUq0I5HZsdiYZf9AMbQPSVOFPSdtidi1JKTfyq/nyJ4': { chainKey: [Object], chainType: 1, messageKeys: {} }
+  },
+  registrationId: 286454376,
+  currentRatchet: {
+    ephemeralKeyPair: {
+      pubKey: <Buffer 05 35 2a d0 8e 47 66 c7 62 61 97 fd 00 c6 d0 3d 25 4e 14 f4 9d b6 27 62 d4 92 93 7f 2a bf 9f 22 78>,
+      privKey: <Buffer 08 71 07 84 15 e6 81 da c0 ba bc 6f cc ae 67 c3 62 db 16 ee 67 a6 bf 3d f2 96 ec 3c 8d ad c4 5d>
+    },
+    lastRemoteEphemeralKey: <Buffer 05 62 8e d6 5f b0 25 0b 51 12 7f d5 04 df 65 f8 6f e2 f1 57 81 14 41 b9 b1 01 79 31 a9 a8 f0 27 65>,
+    previousCounter: 0,
+    rootKey: <Buffer a6 3b 86 5e 5e 99 d5 68 a5 ab dc e3 5e 2e 59 22 34 ef b1 a1 c8 01 78 8a 75 db ea 74 43 63 a3 a0>
+  },
+  indexInfo: {
+    baseKey: <Buffer 05 b4 60 89 06 df f3 dc ae 34 9e d5 2f ab ba e9 f2 07 b3 9c 4b 24 60 92 92 f2 44 64 48 47 94 d6 05>,
+    baseKeyType: 1,
+    closed: -1,
+    used: 1792827505339,
+    created: 1792827505339,
+    remoteIdentityKey: <Buffer 05 72 c9 f9 e7 1b 12 6c 8b 6d b8 2f 32 24 a6 a7 af 1d 81 27 60 fe b0 0c 08 3f b3 af e0 66 7d c1 03>
+  },
+  pendingPreKey: {
+    signedKeyId: 8927017,
+    baseKey: <Buffer 05 b4 60 89 06 df f3 dc ae 34 9e d5 2f ab ba e9 f2 07 b3 9c 4b 24 60 92 92 f2 44 64 48 47 94 d6 05>,
+    preKeyId: 6686900
+  }
+}
+{"level":30,"time":"2026-10-24T07:38:33.457Z","pid":22175,"hostname":"localhost","class":"baileys","msgAttrs":{"from":"28978798686364@lid","type":"text","edit":"7","id":"ACBE6102E2BF1CDD33533D5F39BD8BA7","sts":"1792826381226378","offline":"1","recipient":"271060184342730@lid","notify":"vuyani mbenenge","peer_recipient_pn":"27816365527@s.whatsapp.net","t":"1792826381"},"retryCount":1,"msg":"sent retry receipt"}
+Closing session: SessionEntry {
+  _chains: {
+    'BTL3IsfMd4EwKell2z2V5sKHres67MyqbT+zI32e3XhV': { chainKey: [Object], chainType: 1, messageKeys: {} }
+  },
+  registrationId: 286454376,
+  currentRatchet: {
+    ephemeralKeyPair: {
+      pubKey: <Buffer 05 32 f7 22 c7 cc 77 81 30 29 e9 65 db 3d 95 e6 c2 87 ad eb 3a ec cc aa 6d 3f b3 23 7d 9e dd 78 55>,
+      privKey: <Buffer a8 75 18 6a 00 33 70 9e 6a c6 aa 6c 7e ba f3 fd d4 f4 76 b3 bf 23 f0 34 f1 d4 02 bf df 70 ee 53>
+    },
+    lastRemoteEphemeralKey: <Buffer 05 62 8e d6 5f b0 25 0b 51 12 7f d5 04 df 65 f8 6f e2 f1 57 81 14 41 b9 b1 01 79 31 a9 a8 f0 27 65>,
+    previousCounter: 0,
+    rootKey: <Buffer 04 04 15 c4 a9 97 d7 ca 3a e2 80 e4 40 97 3f 1f 2b a6 e9 38 b0 a5 a3 ff 28 b0 de 4b c5 57 98 fb>
+  },
+  indexInfo: {
+    baseKey: <Buffer 05 0e 5f 5a 79 1b 45 87 4d 2f 26 6c 30 9a f2 97 c4 31 e6 3a 48 89 6f 85 ae db 74 70 f1 7a 36 0d 3b>,
+    baseKeyType: 1,
+    closed: -1,
+    used: 1792827510574,
+    created: 1792827510574,
+    remoteIdentityKey: <Buffer 05 72 c9 f9 e7 1b 12 6c 8b 6d b8 2f 32 24 a6 a7 af 1d 81 27 60 fe b0 0c 08 3f b3 af e0 66 7d c1 03>
+  },
+  pendingPreKey: {
+    signedKeyId: 8927017,
+    baseKey: <Buffer 05 0e 5f 5a 79 1b 45 87 4d 2f 26 6c 30 9a f2 97 c4 31 e6 3a 48 89 6f 85 ae db 74 70 f1 7a 36 0d 3b>,
+    preKeyId: 6686901
+  }
+}
+Decrypted message with closed session.
+{"level":50,"time":"2026-10-24T07:39:12.919Z","pid":22175,"hostname":"localhost","class":"baileys","err":{"type":"Error","message":"Timed Out","stack":"Error: Timed Out\n    at file:///data/data/com.termux/files/home/whatsapp-bot/node_modules/@whiskeysockets/baileys/lib/Utils/generics.js:131:32","data":{"stack":"Error\n    at promiseTimeout (file:///data/data/com.termux/files/home/whatsapp-bot/node_modules/@whiskeysockets/baileys/lib/Utils/generics.js:126:19)\n    at waitForMessage (file:///data/data/com.termux/files/home/whatsapp-bot/node_modules/@whiskeysockets/baileys/lib/Socket/socket.js:115:34)\n    at query (file:///data/data/com.termux/files/home/whatsapp-bot/node_modules/@whiskeysockets/baileys/lib/Socket/socket.js:138:45)\n    at fetchProps (file:///data/data/com.termux/files/home/whatsapp-bot/node_modules/@whiskeysockets/baileys/lib/Socket/chats.js:631:34)\n    at executeInitQueries (file:///data/data/com.termux/files/home/whatsapp-bot/node_modules/@whiskeysockets/baileys/lib/Socket/chats.js:762:28)\n    at EventEmitter.<anonymous> (file:///data/data/com.termux/files/home/whatsapp-bot/node_modules/@whiskeysockets/baileys/lib/Socket/chats.js:859:17)\n    at EventEmitter.emit (node:events:526:24)\n    at EventEmitter.<anonymous> (file:///data/data/com.termux/files/home/whatsapp-bot/node_modules/@whiskeysockets/baileys/lib/Utils/event-buffer.js:35:16)\n    at EventEmitter.emit (node:events:514:20)\n    at Object.emit (file:///data/data/com.termux/files/home/whatsapp-bot/node_modules/@whiskeysockets/baileys/lib/Utils/event-buffer.js:83:23)"},"isBoom":true,"isServer":false,"output":{"statusCode":408,"payload":{"statusCode":408,"error":"Request Time-out","message":"Timed Out"},"headers":{}}},"msg":"unexpected error in 'init queries'"}
+⚠️ API Key [Index 0] hit quota/limit or failed: {"error":{"code":404,"message":"models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.","status":"NOT_FOUND"}}. Rotating...
+⚠️ API Key [Index 1] hit quota/limit or failed: {"error":{"code":404,"message":"models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.","status":"NOT_FOUND"}}. Rotating...
+⚠️ API Key [Index 2] hit quota/limit or failed: {"error":{"code":404,"message":"models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.","status":"NOT_FOUND"}}. Rotating...
+⚠️ API Key [Index 3] hit quota/limit or failed: {"error":{"code":404,"message":"models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.","status":"NOT_FOUND"}}. Rotating...
+Auto-reply error: Error: All Gemini API keys have exhausted their daily quotas or failed.
+    at callGemini (file:///data/data/com.termux/files/home/whatsapp-bot/index.js:35:23)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async EventEmitter.<anonymous> (file:///data/data/com.termux/files/home/whatsapp-bot/index.js:212:38)
+⚠️ API Key [Index 0] hit quota/limit or failed: {"error":{"code":404,"message":"models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.","status":"NOT_FOUND"}}. Rotating...
+⚠️ API Key [Index 1] hit quota/limit or failed: {"error":{"code":404,"message":"models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.","status":"NOT_FOUND"}}. Rotating...
+⚠️ API Key [Index 2] hit quota/limit or failed: {"error":{"code":404,"message":"models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.","status":"NOT_FOUND"}}. Rotating...
+⚠️ API Key [Index 3] hit quota/limit or failed: {"error":{"code":404,"message":"models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.","status":"NOT_FOUND"}}. Rotating...
+Auto-reply error: Error: All Gemini API keys have exhausted their daily quotas or failed.
+    at callGemini (file:///data/data/com.termux/files/home/whatsapp-bot/index.js:35:23)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async EventEmitter.<anonymous> (file:///data/data/com.termux/files/home/whatsapp-bot/index.js:212:38)
+{"level":50,"time":"2026-10-24T08:28:14.245Z","pid":22175,"hostname":"localhost","class":"baileys","node":{"tag":"stream:error","attrs":{},"content":[{"tag":"ack","attrs":{"class":"message","type":"media","id":"AC053D075FBCBFE79C8166321096AB38"}}]},"msg":"stream errored out"}
+Connection closed. Reconnecting... true
+{"level":30,"time":"2026-10-24T08:28:14.290Z","pid":22175,"hostname":"localhost","class":"baileys","trace":"Error: Stream Errored (ack)\n    at WebSocketClient.<anonymous> (file:///data/data/com.termux/files/home/whatsapp-bot/node_modules/@whiskeysockets/baileys/lib/Socket/socket.js:510:13)\n    at WebSocketClient.emit (node:events:514:20)\n    at file:///data/data/com.termux/files/home/whatsapp-bot/node_modules/@whiskeysockets/baileys/lib/Socket/socket.js:230:35\n    at Object.decodeFrame (file:///data/data/com.termux/files/home/whatsapp-bot/node_modules/@whiskeysockets/baileys/lib/Utils/noise-handler.js:140:17)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)","msg":"connection errored"}
+{"level":30,"time":"2026-10-24T08:28:14.957Z","pid":22175,"hostname":"localhost","class":"baileys","browser":["Ubuntu","Chrome","22.04.4"],"helloMsg":{"clientHello":{"ephemeral":"+R2oA8v5Yyhh/3YuUkJAom2XkbbtNxEEOII2CcGavGE="}},"msg":"connected to WA"}
+{"level":30,"time":"2026-10-24T08:28:15.324Z","pid":22175,"hostname":"localhost","class":"baileys","node":{"username":"27665989026","passive":false,"userAgent":{"platform":"WEB","appVersion":{"primary":2,"secondary":3000,"tertiary":1043857760},"mcc":"000","mnc":"000","osVersion":"0.1","device":"Desktop","osBuildNumber":"0.1","releaseChannel":"RELEASE","localeLanguageIso6391":"en","localeCountryIso31661Alpha2":"US"},"webInfo":{"webSubPlatform":"WEB_BROWSER"},"connectType":"WIFI_UNKNOWN","connectReason":"USER_ACTIVATED","device":8,"pull":true},"msg":"logging in..."}
+{"level":30,"time":"2026-10-24T08:28:16.367Z","pid":22175,"hostname":"localhost","class":"baileys","msg":"21 pre-keys found on server"}
+{"level":30,"time":"2026-10-24T08:28:16.441Z","pid":22175,"hostname":"localhost","class":"baileys","msg":"offline preview received"}
+Failed to decrypt message with any known session...
+Session error:MessageCounterError: Key used already or never filled MessageCounterError: Key used already or never filled
+    at SessionCipher.doDecryptWhisperMessage (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:236:19)
+    at SessionCipher.decryptWithSessions (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:147:40)
+    at 28978798686364.0 [as awaitable] (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:171:39)
+    at async _asyncQueueExecutor (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/queue_job.js:20:29)
+Session error:MessageCounterError: Key used already or never filled MessageCounterError: Key used already or never filled
+    at SessionCipher.doDecryptWhisperMessage (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:236:19)
+    at SessionCipher.decryptWithSessions (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:147:40)
+    at async 28978798686364.0 [as awaitable] (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:171:28)
+    at async _asyncQueueExecutor (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/queue_job.js:20:29)
+Session error:MessageCounterError: Key used already or never filled MessageCounterError: Key used already or never filled
+    at SessionCipher.doDecryptWhisperMessage (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:236:19)
+    at SessionCipher.decryptWithSessions (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:147:40)
+    at async 28978798686364.0 [as awaitable] (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:171:28)
+    at async _asyncQueueExecutor (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/queue_job.js:20:29)
+Session error:MessageCounterError: Key used already or never filled MessageCounterError: Key used already or never filled
+    at SessionCipher.doDecryptWhisperMessage (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:236:19)
+    at SessionCipher.decryptWithSessions (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:147:40)
+    at async 28978798686364.0 [as awaitable] (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:171:28)
+    at async _asyncQueueExecutor (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/queue_job.js:20:29)
+Session error:MessageCounterError: Key used already or never filled MessageCounterError: Key used already or never filled
+    at SessionCipher.doDecryptWhisperMessage (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:236:19)
+    at SessionCipher.decryptWithSessions (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:147:40)
+    at async 28978798686364.0 [as awaitable] (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:171:28)
+    at async _asyncQueueExecutor (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/queue_job.js:20:29)
+Session error:Error: Bad MAC Error: Bad MAC
+    at Object.verifyMAC (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/crypto.js:87:15)
+    at SessionCipher.doDecryptWhisperMessage (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:250:16)
+    at async SessionCipher.decryptWithSessions (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:147:29)
+    at async 28978798686364.0 [as awaitable] (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:171:28)
+    at async _asyncQueueExecutor (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/queue_job.js:20:29)
+Session error:Error: Bad MAC Error: Bad MAC
+    at Object.verifyMAC (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/crypto.js:87:15)
+    at SessionCipher.doDecryptWhisperMessage (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:250:16)
+    at async SessionCipher.decryptWithSessions (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:147:29)
+    at async 28978798686364.0 [as awaitable] (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:171:28)
+    at async _asyncQueueExecutor (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/queue_job.js:20:29)
+Session error:Error: Bad MAC Error: Bad MAC
+    at Object.verifyMAC (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/crypto.js:87:15)
+    at SessionCipher.doDecryptWhisperMessage (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:250:16)
+    at async SessionCipher.decryptWithSessions (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:147:29)
+    at async 28978798686364.0 [as awaitable] (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:171:28)
+    at async _asyncQueueExecutor (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/queue_job.js:20:29)
+Session error:Error: Bad MAC Error: Bad MAC
+    at Object.verifyMAC (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/crypto.js:87:15)
+    at SessionCipher.doDecryptWhisperMessage (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:250:16)
+    at async SessionCipher.decryptWithSessions (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:147:29)
+    at async 28978798686364.0 [as awaitable] (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:171:28)
+    at async _asyncQueueExecutor (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/queue_job.js:20:29)
+Session error:Error: Bad MAC Error: Bad MAC
+    at Object.verifyMAC (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/crypto.js:87:15)
+    at SessionCipher.doDecryptWhisperMessage (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:250:16)
+    at async SessionCipher.decryptWithSessions (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:147:29)
+    at async 28978798686364.0 [as awaitable] (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:171:28)
+    at async _asyncQueueExecutor (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/queue_job.js:20:29)
+Session error:Error: Bad MAC Error: Bad MAC
+    at Object.verifyMAC (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/crypto.js:87:15)
+    at SessionCipher.doDecryptWhisperMessage (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:250:16)
+    at async SessionCipher.decryptWithSessions (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:147:29)
+    at async 28978798686364.0 [as awaitable] (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:171:28)
+    at async _asyncQueueExecutor (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/queue_job.js:20:29)
+Session error:Error: Bad MAC Error: Bad MAC
+    at Object.verifyMAC (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/crypto.js:87:15)
+    at SessionCipher.doDecryptWhisperMessage (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:250:16)
+    at async SessionCipher.decryptWithSessions (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:147:29)
+    at async 28978798686364.0 [as awaitable] (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:171:28)
+    at async _asyncQueueExecutor (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/queue_job.js:20:29)
+Session error:Error: Bad MAC Error: Bad MAC
+    at Object.verifyMAC (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/crypto.js:87:15)
+    at SessionCipher.doDecryptWhisperMessage (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:250:16)
+    at async SessionCipher.decryptWithSessions (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:147:29)
+    at async 28978798686364.0 [as awaitable] (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:171:28)
+    at async _asyncQueueExecutor (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/queue_job.js:20:29)
+Session error:Error: Bad MAC Error: Bad MAC
+    at Object.verifyMAC (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/crypto.js:87:15)
+    at SessionCipher.doDecryptWhisperMessage (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:250:16)
+    at async SessionCipher.decryptWithSessions (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:147:29)
+    at async 28978798686364.0 [as awaitable] (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:171:28)
+    at async _asyncQueueExecutor (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/queue_job.js:20:29)
+Session error:Error: Bad MAC Error: Bad MAC
+    at Object.verifyMAC (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/crypto.js:87:15)
+    at SessionCipher.doDecryptWhisperMessage (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:250:16)
+    at async SessionCipher.decryptWithSessions (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:147:29)
+    at async 28978798686364.0 [as awaitable] (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:171:28)
+    at async _asyncQueueExecutor (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/queue_job.js:20:29)
+Session error:Error: Bad MAC Error: Bad MAC
+    at Object.verifyMAC (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/crypto.js:87:15)
+    at SessionCipher.doDecryptWhisperMessage (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:250:16)
+    at async SessionCipher.decryptWithSessions (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:147:29)
+    at async 28978798686364.0 [as awaitable] (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:171:28)
+    at async _asyncQueueExecutor (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/queue_job.js:20:29)
+Session error:Error: Bad MAC Error: Bad MAC
+    at Object.verifyMAC (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/crypto.js:87:15)
+    at SessionCipher.doDecryptWhisperMessage (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:250:16)
+    at async SessionCipher.decryptWithSessions (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:147:29)
+    at async 28978798686364.0 [as awaitable] (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:171:28)
+    at async _asyncQueueExecutor (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/queue_job.js:20:29)
+Session error:Error: Bad MAC Error: Bad MAC
+    at Object.verifyMAC (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/crypto.js:87:15)
+    at SessionCipher.doDecryptWhisperMessage (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:250:16)
+    at async SessionCipher.decryptWithSessions (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:147:29)
+    at async 28978798686364.0 [as awaitable] (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:171:28)
+    at async _asyncQueueExecutor (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/queue_job.js:20:29)
+{"level":50,"time":"2026-10-24T08:28:16.626Z","pid":22175,"hostname":"localhost","class":"baileys","key":{"remoteJid":"271060184342730@lid","fromMe":true,"id":"ACBE6102E2BF1CDD33533D5F39BD8BA7"},"err":{"type":"SessionError","message":"No matching sessions found for message","stack":"SessionError: No matching sessions found for message\n    at SessionCipher.decryptWithSessions (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:161:15)\n    at async 28978798686364.0 [as awaitable] (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/session_cipher.js:171:28)\n    at async _asyncQueueExecutor (/data/data/com.termux/files/home/whatsapp-bot/node_modules/libsignal/src/queue_job.js:20:29)","name":"SessionError"},"msg":"failed to decrypt message"}
+{"level":30,"time":"2026-10-24T08:28:16.644Z","pid":22175,"hostname":"localhost","class":"baileys","msg":"opened connection to WA"}
+
+✅ Ultimate WhatsApp AI Bot (Powered by cold.era10) is active with Multi-Key Rotation!
+
+{"level":30,"time":"2026-10-24T08:28:16.707Z","pid":22175,"hostname":"localhost","class":"baileys","msg":"handled 6 offline messages/notifications"}
+{"level":30,"time":"2026-10-24T08:28:16.728Z","pid":22175,"hostname":"localhost","class":"baileys","msg":"Connection is now AwaitingInitialSync, buffering events"}
+{"level":30,"time":"2026-10-24T08:28:16.728Z","pid":22175,"hostname":"localhost","class":"baileys","msg":"History sync is disabled by config, not waiting for notification. Transitioning to Online."}
+⚠️ API Key [Index 0] hit quota/limit or failed: {"error":{"code":404,"message":"models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.","status":"NOT_FOUND"}}. Rotating...
+⚠️ API Key [Index 1] hit quota/limit or failed: {"error":{"code":404,"message":"models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.","status":"NOT_FOUND"}}. Rotating...
+⚠️ API Key [Index 2] hit quota/limit or failed: {"error":{"code":404,"message":"models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.","status":"NOT_FOUND"}}. Rotating...
+⚠️ API Key [Index 3] hit quota/limit or failed: {"error":{"code":404,"message":"models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.","status":"NOT_FOUND"}}. Rotating...
+Auto-reply error: Error: All Gemini API keys have exhausted their daily quotas or failed.
+    at callGemini (file:///data/data/com.termux/files/home/whatsapp-bot/index.js:35:23)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async EventEmitter.<anonymous> (file:///data/data/com.termux/files/home/whatsapp-bot/index.js:212:38)
+{"level":30,"time":"2026-10-24T08:28:21.556Z","pid":22175,"hostname":"localhost","class":"baileys","msgAttrs":{"from":"120363426227027438@newsletter","type":"text","edit":"8","id":"ACB0130B8850914C0E95407C85CC1181","sts":"1792823567533465","offline":"3","server_id":"782","t":"1792823566"},"retryCount":1,"msg":"sent retry receipt"}
+⚠️ API Key [Index 0] hit quota/limit or failed: {"error":{"code":404,"message":"models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.","status":"NOT_FOUND"}}. Rotating...
+⚠️ API Key [Index 1] hit quota/limit or failed: {"error":{"code":404,"message":"models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.","status":"NOT_FOUND"}}. Rotating...
+⚠️ API Key [Index 2] hit quota/limit or failed: {"error":{"code":404,"message":"models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.","status":"NOT_FOUND"}}. Rotating...
+⚠️ API Key [Index 3] hit quota/limit or failed: {"error":{"code":404,"message":"models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.","status":"NOT_FOUND"}}. Rotating...
+Auto-reply error: Error: All Gemini API keys have exhausted their daily quotas or failed.
+    at callGemini (file:///data/data/com.termux/files/home/whatsapp-bot/index.js:35:23)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async EventEmitter.<anonymous> (file:///data/data/com.termux/files/home/whatsapp-bot/index.js:212:38)
+Closing session: SessionEntry {
+  _chains: {
+    'BXxu1zLA7MRaZxC/ctmpg3Do5p8DDZpe2oyfck4ir59M': { chainKey: [Object], chainType: 2, messageKeys: {} },
+    BTvRBnMcJ6YCRLdBipPEr8P3vLSwc2C1HW1xlGzgII8k: { chainKey: [Object], chainType: 1, messageKeys: {} }
+  },
+  registrationId: 286454376,
+  currentRatchet: {
+    ephemeralKeyPair: {
+      pubKey: <Buffer 05 3b d1 06 73 1c 27 a6 02 44 b7 41 8a 93 c4 af c3 f7 bc b4 b0 73 60 b5 1d 6d 71 94 6c e0 20 8f 24>,
+      privKey: <Buffer c8 1b 20 18 df 3b 3b fc fd fd ac 6e b4 ae 7f 89 3d 5c bd e7 b5 4c d3 c9 4b 05 b1 15 cf e8 4e 72>
+    },
+    lastRemoteEphemeralKey: <Buffer 05 7c 6e d7 32 c0 ec c4 5a 67 10 bf 72 d9 a9 83 70 e8 e6 9f 03 0d 9a 5e da 8c 9f 72 4e 22 af 9f 4c>,
+    previousCounter: -1,
+    rootKey: <Buffer 2f 43 79 14 25 11 40 15 97 9b 5c 24 20 47 3c 4b 95 40 50 85 fb 10 65 9f c8 8a e2 68 9e 32 0b 7c>
+  },
+  indexInfo: {
+    baseKey: <Buffer 05 3a 63 c3 85 dc 1e 03 cb fb 77 7d 32 86 47 27 6e 74 da 47 32 b1 98 9d 0e 73 65 04 93 b7 01 1e 2f>,
+    baseKeyType: 1,
+    closed: -1,
+    used: 1792827515777,
+    created: 1792827515777,
+    remoteIdentityKey: <Buffer 05 72 c9 f9 e7 1b 12 6c 8b 6d b8 2f 32 24 a6 a7 af 1d 81 27 60 fe b0 0c 08 3f b3 af e0 66 7d c1 03>
+  },
+  pendingPreKey: {
+    signedKeyId: 8927017,
+    baseKey: <Buffer 05 3a 63 c3 85 dc 1e 03 cb fb 77 7d 32 86 47 27 6e 74 da 47 32 b1 98 9d 0e 73 65 04 93 b7 01 1e 2f>,
+    preKeyId: 6686902
+  }
+}
+{"level":30,"time":"2026-10-24T08:28:26.841Z","pid":22175,"hostname":"localhost","class":"baileys","msgAttrs":{"from":"120363426227027438@newsletter","type":"text","edit":"8","id":"AC45860FB9FF631C064951C5EF77B90F","sts":"1792823567833990","offline":"3","server_id":"781","t":"1792823566"},"retryCount":1,"msg":"sent retry receipt"}
+Closing session: SessionEntry {
+  _chains: {
+    'Bd9VCmCaLCU5vZk+fZNKdMfQfwrHdJpUJE5mW/AZ6m8h': { chainKey: [Object], chainType: 1, messageKeys: {} }
+  },
+  registrationId: 286454376,
+  currentRatchet: {
+    ephemeralKeyPair: {
+      pubKey: <Buffer 05 df 55 0a 60 9a 2c 25 39 bd 99 3e 7d 93 4a 74 c7 d0 7f 0a c7 74 9a 54 24 4e 66 5b f0 19 ea 6f 21>,
+      privKey: <Buffer f8 b2 e3 06 00 49 68 95 51 f0 88 cc c6 8f 0b 2a c7 8a 6a c7 eb 5d ec 00 cd 9c 32 98 2d d9 a3 42>
+    },
+    lastRemoteEphemeralKey: <Buffer 05 62 8e d6 5f b0 25 0b 51 12 7f d5 04 df 65 f8 6f e2 f1 57 81 14 41 b9 b1 01 79 31 a9 a8 f0 27 65>,
+    previousCounter: 0,
+    rootKey: <Buffer 9d 7c 4c c3 2d 3e 63 55 68 49 1a d5 7a 88 ae 22 0b a6 d0 11 a6 23 c0 da 0f 96 e0 ea 77 31 72 ba>
+  },
+  indexInfo: {
+    baseKey: <Buffer 05 0c b3 9d d9 e2 e4 b1 c6 0f 85 2b 69 b8 c6 fa 8c 5e 09 93 ce f1 da dd 2d d9 79 62 cc d5 93 26 55>,
+    baseKeyType: 1,
+    closed: -1,
+    used: 1792830505092,
+    created: 1792830505092,
+    remoteIdentityKey: <Buffer 05 72 c9 f9 e7 1b 12 6c 8b 6d b8 2f 32 24 a6 a7 af 1d 81 27 60 fe b0 0c 08 3f b3 af e0 66 7d c1 03>
+  },
+  pendingPreKey: {
+    signedKeyId: 8927017,
+    baseKey: <Buffer 05 0c b3 9d d9 e2 e4 b1 c6 0f 85 2b 69 b8 c6 fa 8c 5e 09 93 ce f1 da dd 2d d9 79 62 cc d5 93 26 55>,
+    preKeyId: 6686903
+  }
+}
+{"level":30,"time":"2026-10-24T08:28:32.107Z","pid":22175,"hostname":"localhost","class":"baileys","msgAttrs":{"from":"28978798686364@lid","type":"text","edit":"7","id":"ACBE6102E2BF1CDD33533D5F39BD8BA7","sts":"1792827515472523","offline":"1","notify":"vuyani mbenenge","recipient":"271060184342730@lid","peer_recipient_pn":"27816365527@s.whatsapp.net","t":"1792827515"},"retryCount":1,"msg":"sent retry receipt"}
+Closing session: SessionEntry {
+  _chains: {
+    'BZuXMbs5WwB4YHEH+/KK0qdSmJVwIDDae9h2PNyfWzhU': { chainKey: [Object], chainType: 1, messageKeys: {} }
+  },
+  registrationId: 286454376,
+  currentRatchet: {
+    ephemeralKeyPair: {
+      pubKey: <Buffer 05 9b 97 31 bb 39 5b 00 78 60 71 07 fb f2 8a d2 a7 52 98 95 70 20 30 da 7b d8 76 3c dc 9f 5b 38 54>,
+      privKey: <Buffer f0 ed f5 8a c0 52 40 8a 02 53 bb 03 92 4f bc b2 30 69 b8 4e cc 53 8b 9c f6 13 b4 0e 0b 65 df 5d>
+    },
+    lastRemoteEphemeralKey: <Buffer 05 62 8e d6 5f b0 25 0b 51 12 7f d5 04 df 65 f8 6f e2 f1 57 81 14 41 b9 b1 01 79 31 a9 a8 f0 27 65>,
+    previousCounter: 0,
+    rootKey: <Buffer e5 12 85 d4 a9 16 de fe 31 2e 2e bc b4 b0 c3 2e f3 55 7a 82 99 40 c3 42 f1 bc 67 45 1d 5c 20 0a>
+  },
+  indexInfo: {
+    baseKey: <Buffer 05 c9 4e 7a 5f 55 4b 90 8a 1e 28 61 45 38 05 db ba d9 70 92 aa b7 85 36 83 74 b5 a7 44 b5 e9 b1 10>,
+    baseKeyType: 1,
+    closed: -1,
+    used: 1792830509619,
+    created: 1792830509619,
+    remoteIdentityKey: <Buffer 05 72 c9 f9 e7 1b 12 6c 8b 6d b8 2f 32 24 a6 a7 af 1d 81 27 60 fe b0 0c 08 3f b3 af e0 66 7d c1 03>
+  },
+  pendingPreKey: {
+    signedKeyId: 8927017,
+    baseKey: <Buffer 05 c9 4e 7a 5f 55 4b 90 8a 1e 28 61 45 38 05 db ba d9 70 92 aa b7 85 36 83 74 b5 a7 44 b5 e9 b1 10>,
+    preKeyId: 6686904
+  }
+}
+Decrypted message with closed session.
+{"level":50,"time":"2026-10-24T08:29:16.672Z","pid":22175,"hostname":"localhost","class":"baileys","err":{"type":"Error","message":"Timed Out","stack":"Error: Timed Out\n    at file:///data/data/com.termux/files/home/whatsapp-bot/node_modules/@whiskeysockets/baileys/lib/Utils/generics.js:131:32","data":{"stack":"Error\n    at promiseTimeout (file:///data/data/com.termux/files/home/whatsapp-bot/node_modules/@whiskeysockets/baileys/lib/Utils/generics.js:126:19)\n    at waitForMessage (file:///data/data/com.termux/files/home/whatsapp-bot/node_modules/@whiskeysockets/baileys/lib/Socket/socket.js:115:34)\n    at query (file:///data/data/com.termux/files/home/whatsapp-bot/node_modules/@whiskeysockets/baileys/lib/Socket/socket.js:138:45)\n    at fetchProps (file:///data/data/com.termux/files/home/whatsapp-bot/node_modules/@whiskeysockets/baileys/lib/Socket/chats.js:631:34)\n    at executeInitQueries (file:///data/data/com.termux/files/home/whatsapp-bot/node_modules/@whiskeysockets/baileys/lib/Socket/chats.js:762:28)\n    at EventEmitter.<anonymous> (file:///data/data/com.termux/files/home/whatsapp-bot/node_modules/@whiskeysockets/baileys/lib/Socket/chats.js:859:17)\n    at EventEmitter.emit (node:events:526:24)\n    at EventEmitter.<anonymous> (file:///data/data/com.termux/files/home/whatsapp-bot/node_modules/@whiskeysockets/baileys/lib/Utils/event-buffer.js:35:16)\n    at EventEmitter.emit (node:events:514:20)\n    at Object.emit (file:///data/data/com.termux/files/home/whatsapp-bot/node_modules/@whiskeysockets/baileys/lib/Utils/event-buffer.js:83:23)"},"isBoom":true,"isServer":false,"output":{"statusCode":408,"payload":{"statusCode":408,"error":"Request Time-out","message":"Timed Out"},"headers":{}}},"msg":"unexpected error in 'init queries'"}
+⚠️ API Key [Index 0] hit quota/limit or failed: {"error":{"code":404,"message":"models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.","status":"NOT_FOUND"}}. Rotating...
+⚠️ API Key [Index 1] hit quota/limit or failed: {"error":{"code":404,"message":"models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.","status":"NOT_FOUND"}}. Rotating...
+⚠️ API Key [Index 2] hit quota/limit or failed: {"error":{"code":404,"message":"models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.","status":"NOT_FOUND"}}. Rotating...
+⚠️ API Key [Index 3] hit quota/limit or failed: {"error":{"code":404,"message":"models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.","status":"NOT_FOUND"}}. Rotating...
+Auto-reply error: Error: All Gemini API keys have exhausted their daily quotas or failed.
+    at callGemini (file:///data/data/com.termux/files/home/whatsapp-bot/index.js:35:23)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async EventEmitter.<anonymous> (file:///data/data/com.termux/files/home/whatsapp-bot/index.js:212:38)
