@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 import { exec } from 'child_process';
 import fs from 'fs';
 import path from 'path';
+import http from 'http';
 
 dotenv.config();
 
@@ -769,4 +770,13 @@ function logMessageToDisk(chatType, senderName, messageText) {
 }
 
 startBot();
+
+// Dummy HTTP Server for Render port detection
+const PORT = process.env.PORT || 10000;
+http.createServer((req, res) => {
+    res.writeHead(200, { 'Content-Type': 'text/plain' });
+    res.end('WhatsApp Bot is running!');
+}).listen(PORT, '0.0.0.0', () => {
+    console.log(`🌐 HTTP server listening on port ${PORT}`);
+});
 
