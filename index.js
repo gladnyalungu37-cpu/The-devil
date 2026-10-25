@@ -78,12 +78,14 @@ function runCommand(cmd) {
 async function startBot() {
     const { state, saveCreds } = await useMultiFileAuthState('auth_info_baileys');
     
-    // Fixed: Added markOnlineOnConnect and disabled historical sync backlog to prevent freezing
+    // Fixed: Added connection and query timeouts to fix the 408 Timeout issue on Render
     const sock = makeWASocket({ 
         auth: state, 
         printQRInTerminal: false,
         markOnlineOnConnect: true,
-        shouldSyncHistoryMessage: () => false
+        shouldSyncHistoryMessage: () => false,
+        connectTimeoutMs: 60_000,
+        defaultQueryTimeoutMs: 60_000
     });
 
     sock.ev.on('creds.update', saveCreds);
