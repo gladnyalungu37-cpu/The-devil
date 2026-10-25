@@ -77,7 +77,14 @@ function runCommand(cmd) {
 
 async function startBot() {
     const { state, saveCreds } = await useMultiFileAuthState('auth_info_baileys');
-    const sock = makeWASocket({ auth: state, printQRInTerminal: false });
+    
+    // Fixed: Added markOnlineOnConnect and disabled historical sync backlog to prevent freezing
+    const sock = makeWASocket({ 
+        auth: state, 
+        printQRInTerminal: false,
+        markOnlineOnConnect: true,
+        shouldSyncHistoryMessage: () => false
+    });
 
     sock.ev.on('creds.update', saveCreds);
 
