@@ -3,3 +3,4 @@ node_modules/
 *.part
 .env
 chats-log.json
+auth_info_baileys/
