@@ -89,11 +89,15 @@ async function startBot() {
         const sock = makeWASocket({ 
             auth: state, 
             printQRInTerminal: false,
-            markOnlineOnConnect: true,
+            markOnlineOnConnect: false,
             shouldSyncHistoryMessage: () => false,
-            connectTimeoutMs: 60_000,
-            defaultQueryTimeoutMs: 60_000,
-            browser: ["Ubuntu", "Chrome", "22.04.4"]
+            syncFullHistory: false,
+            connectTimeoutMs: 120_000,
+            defaultQueryTimeoutMs: 120_000,
+            keepAliveIntervalMs: 30_000,
+            retryRequestDelayMs: 5000,
+            generateHighQualityLinkPreview: false,
+            browser: ["Chrome", "Desktop", "110.0.5481.177"]
         });
 
         activeSock = sock;
@@ -111,7 +115,7 @@ async function startBot() {
                 const shouldReconnect = statusCode !== DisconnectReason.loggedOut;
                 console.log(`🔌 Connection closed. StatusCode: ${statusCode}, Reconnecting: ${shouldReconnect}`);
                 if (shouldReconnect) {
-                    setTimeout(() => startBot(), 5000); // Wait 5 seconds before clean restart
+                    setTimeout(() => startBot(), 5000);
                 }
             } else if (connection === 'open') {
                 console.log('\n✅ Ultimate WhatsApp AI Bot (Powered by cold.era10) is active!\n');
