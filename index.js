@@ -2,18 +2,21 @@ import { makeWASocket, useMultiFileAuthState, DisconnectReason, downloadMediaMes
 import qrcode from 'qrcode-terminal';
 import { GoogleGenAI } from '@google/genai';
 import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import { exec } from 'child_process';
 import fs from 'fs';
-import path from 'path';
 import http from 'http';
 
-dotenv.config();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+dotenv.config({ path: path.join(__dirname, '.env') });
 
 const geminiKeys = [
-    process.env.GEMINI_KEY_1,
-    process.env.GEMINI_KEY_2,
-    process.env.GEMINI_KEY_3,
-    process.env.GEMINI_KEY_4
+    process.env.GEMINI_API_KEY_1,
+    process.env.GEMINI_API_KEY_2,
+    process.env.GEMINI_API_KEY_3,
+    process.env.GEMINI_API_KEY_4
 ].filter(Boolean);
 
 let activeKeyIndex = 0;
@@ -176,6 +179,7 @@ async function startBot() {
             const isQuotingBot = botJidNormalized && quotedParticipantNormalized && quotedParticipantNormalized === botJidNormalized;
 
             if ((!isGroup && text && !isCommand) || (isQuotingBot && text && !isCommand)) {
+                if (botSleeping) continue;
                 const currentMode = userModes.get(remoteJid) || 'friend';
                 let sysInstruction = "You are a warm, casual, and supportive friend on WhatsApp.";
                 if (currentMode === 'normal') sysInstruction = "You are a fast WhatsApp assistant.";
@@ -188,11 +192,11 @@ async function startBot() {
                         contents: text,
                         config: { systemInstruction: sysInstruction }
                     });
+                    if (botSleeping) continue;
                     await sock.sendMessage(remoteJid, { text: response.text });
                     continue;
                 } catch (err) {
                     console.error("❌ Direct DM/AI Error:", err.message);
-                    await sock.sendMessage(remoteJid, { text: `⚠️ AI is experiencing high demand. Retrying shortly... (${err.message})` });
                     continue;
                 }
             }
@@ -242,6 +246,7 @@ async function startBot() {
             }
 
             if (baseWord === 'ai') {
+                if (botSleeping) continue;
                 const prompt = text.replace(/^[!]?ai\s*/i, '').trim();
                 if (!prompt) {
                     await sock.sendMessage(remoteJid, { text: 'Please ask a question! Example: ai What is gravity?' });
@@ -249,9 +254,10 @@ async function startBot() {
                 }
                 try {
                     const response = await callGemini({ contents: prompt });
+                    if (botSleeping) continue;
                     await sock.sendMessage(remoteJid, { text: response.text });
                 } catch (err) {
-                    await sock.sendMessage(remoteJid, { text: `❌ AI Error: ${err.message}` });
+                    console.error("❌ AI Error:", err.message);
                 }
             }
 
@@ -331,6 +337,7 @@ async function startBot() {
             }
 
             if (baseWord === 'talk') {
+                if (botSleeping) continue;
                 const prompt = text.replace(/^[!]?talk\s*/i, '').trim();
                 if (!prompt) {
                     await sock.sendMessage(remoteJid, { text: 'Say something! Example: talk How are you today?' });
@@ -342,15 +349,20 @@ async function startBot() {
                         contents: prompt,
                         config: { systemInstruction: "Respond like a close friend in 2-3 short, spoken sentences." }
                     });
+                    if (botSleeping) continue;
                     const audioPath = path.join(process.cwd(), `talk_${Date.now()}.mp3`);
                     const pyScript = `from gtts import gTTS; tts = gTTS(text='${aiResponse.text.replace(/'/g, "\\'")}', lang='en'); tts.save('${audioPath}')`;
                     await runCommand(`python -c "${pyScript}"`);
                     if (fs.existsSync(audioPath)) {
+                        if (botSleeping) {
+                            if (fs.existsSync(audioPath)) fs.unlinkSync(audioPath);
+                            continue;
+                        }
                         await sock.sendMessage(remoteJid, { audio: { url: audioPath }, mimetype: 'audio/mp4', ptt: true });
                         fs.unlinkSync(audioPath);
                     }
                 } catch (err) {
-                    await sock.sendMessage(remoteJid, { text: `❌ Talk Error: ${err.message}` });
+                    console.error("❌ Talk Error:", err.message);
                 }
             }
 
@@ -365,6 +377,7 @@ async function startBot() {
             }
 
             if (baseWord === 'imagine') {
+                if (botSleeping) continue;
                 const prompt = text.replace(/^[!]?imagine\s*/i, '').trim();
                 if (!prompt) {
                     await sock.sendMessage(remoteJid, { text: 'Specify what to draw! Example: imagine futuristic sports car on Mars' });
@@ -378,15 +391,20 @@ async function startBot() {
                     const arrayBuffer = await res.arrayBuffer();
                     fs.writeFileSync(imagePath, Buffer.from(arrayBuffer));
                     if (fs.existsSync(imagePath)) {
+                        if (botSleeping) {
+                            if (fs.existsSync(imagePath)) fs.unlinkSync(imagePath);
+                            continue;
+                        }
                         await sock.sendMessage(remoteJid, { image: { url: imagePath }, caption: `✨ *AI Artwork:* ${prompt}\n\n⚡ *Powered by cold.era10*` });
                         fs.unlinkSync(imagePath);
                     }
                 } catch (err) {
-                    await sock.sendMessage(remoteJid, { text: `❌ Imagine Error: ${err.message}` });
+                    console.error("❌ Imagine Error:", err.message);
                 }
             }
 
             if (baseWord === 'match' || baseWord === 'football') {
+                if (botSleeping) continue;
                 const team = text.replace(/^[!]?(match|football)\s*/i, '').trim();
                 if (!team) {
                     await sock.sendMessage(remoteJid, { text: 'Specify a team! Example: match FC Barcelona' });
@@ -397,9 +415,10 @@ async function startBot() {
                     const response = await callGemini({
                         contents: `Provide the latest match scores, upcoming fixtures, and team news for ${team}. Format nicely with emojis.`
                     });
+                    if (botSleeping) continue;
                     await sock.sendMessage(remoteJid, { text: response.text });
                 } catch (err) {
-                    await sock.sendMessage(remoteJid, { text: `❌ Match Info Error: ${err.message}` });
+                    console.error("❌ Match Info Error:", err.message);
                 }
             }
 
@@ -482,16 +501,22 @@ async function startBot() {
                     const drawText = `drawtext=text='${topText.replace(/'/g, "\\'")}':fontcolor=white:fontsize=36:x=(w-text_w)/2:y=20:bordercolor=black:borderw=3,drawtext=text='${bottomText.replace(/'/g, "\\'")}':fontcolor=white:fontsize=36:x=(w-text_w)/2:y=h-th-20:bordercolor=black:borderw=3`;
                     await runCommand(`ffmpeg -i "${inputPath}" -vf "${drawText}" "${outputPath}"`);
                     if (fs.existsSync(outputPath)) {
+                        if (botSleeping) {
+                            if (fs.existsSync(outputPath)) fs.unlinkSync(outputPath);
+                            if (fs.existsSync(inputPath)) fs.unlinkSync(inputPath);
+                            continue;
+                        }
                         await sock.sendMessage(remoteJid, { image: { url: outputPath } });
                         fs.unlinkSync(inputPath);
                         fs.unlinkSync(outputPath);
                     }
                 } catch (err) {
-                    await sock.sendMessage(remoteJid, { text: `❌ Meme Error: ${err.message}` });
+                    console.error("❌ Meme Error:", err.message);
                 }
             }
 
             if (baseWord === 'summarize') {
+                if (botSleeping) continue;
                 const context = msgContent.extendedTextMessage?.contextInfo;
                 const quotedText = context?.quotedMessage?.conversation || context?.quotedMessage?.extendedTextMessage?.text;
                 if (!quotedText) {
@@ -502,13 +527,15 @@ async function startBot() {
                     const response = await callGemini({
                         contents: `Summarize the following text into 3 clear bullet points:\n\n"${quotedText}"`,
                     });
+                    if (botSleeping) continue;
                     await sock.sendMessage(remoteJid, { text: `📝 *Summary:*\n\n${response.text}` });
                 } catch (err) {
-                    await sock.sendMessage(remoteJid, { text: `❌ Summary Error: ${err.message}` });
+                    console.error("❌ Summary Error:", err.message);
                 }
             }
 
             if (baseWord === 'analyze') {
+                if (botSleeping) continue;
                 const context = msgContent.extendedTextMessage?.contextInfo;
                 const quotedText = context?.quotedMessage?.conversation || context?.quotedMessage?.extendedTextMessage?.text;
                 if (!quotedText) {
@@ -519,13 +546,15 @@ async function startBot() {
                     const response = await callGemini({
                         contents: `Analyze this message: "${quotedText}". Provide key insights, tone, and a brief summary.`,
                     });
+                    if (botSleeping) continue;
                     await sock.sendMessage(remoteJid, { text: response.text });
                 } catch (err) {
-                    await sock.sendMessage(remoteJid, { text: `❌ Analysis Error: ${err.message}` });
+                    console.error("❌ Analysis Error:", err.message);
                 }
             }
 
             if (baseWord === 'analyzechat') {
+                if (botSleeping) continue;
                 const buffer = chatBuffers.get(remoteJid) || [];
                 if (buffer.length < 2) {
                     await sock.sendMessage(remoteJid, { text: '⚠️ Not enough chat history captured yet.' });
@@ -537,13 +566,15 @@ async function startBot() {
                     const response = await callGemini({
                         contents: `Here is a transcript of recent messages from this WhatsApp chat:\n\n${formattedHistory}\n\nPlease analyze the interaction. Summarize key topics, emotional tone, and main takeaways.`,
                     });
+                    if (botSleeping) continue;
                     await sock.sendMessage(remoteJid, { text: response.text });
                 } catch (err) {
-                    await sock.sendMessage(remoteJid, { text: `❌ Chat Analysis Error: ${err.message}` });
+                    console.error("❌ Chat Analysis Error:", err.message);
                 }
             }
 
             if (baseWord === 'describe') {
+                if (botSleeping) continue;
                 const quotedMsg = msgContent.extendedTextMessage?.contextInfo?.quotedMessage;
                 const isImage = msgContent.imageMessage || quotedMsg?.imageMessage;
                 if (!isImage) {
@@ -561,9 +592,10 @@ async function startBot() {
                             { text: 'Describe what you see in this image in detail, including text, objects, and overall context.' }
                         ]
                     });
+                    if (botSleeping) continue;
                     await sock.sendMessage(remoteJid, { text: response.text });
                 } catch (err) {
-                    await sock.sendMessage(remoteJid, { text: `❌ Vision Error: ${err.message}` });
+                    console.error("❌ Vision Error:", err.message);
                 }
             }
 
@@ -578,13 +610,17 @@ async function startBot() {
                 try {
                     await runCommand(`yt-dlp --extract-audio --audio-format mp3 -o "${outputPath}" "ytsearch1:${query}"`);
                     if (fs.existsSync(outputPath)) {
+                        if (botSleeping) {
+                            if (fs.existsSync(outputPath)) fs.unlinkSync(outputPath);
+                            continue;
+                        }
                         await sock.sendMessage(remoteJid, { audio: { url: outputPath }, mimetype: 'audio/mp4', fileName: `${query}.mp3` });
                         fs.unlinkSync(outputPath);
                     } else {
                         await sock.sendMessage(remoteJid, { text: '❌ Failed to locate audio file.' });
                     }
                 } catch (err) {
-                    await sock.sendMessage(remoteJid, { text: `❌ Download Error: ${err.message}` });
+                    console.error("❌ Download Error:", err.message);
                     if (fs.existsSync(outputPath)) fs.unlinkSync(outputPath);
                 }
             }
@@ -600,13 +636,17 @@ async function startBot() {
                 try {
                     await runCommand(`yt-dlp --extractor-args "youtube:player_client=android" -o "${outputPath}" "ytsearch1:${query}"`);
                     if (fs.existsSync(outputPath)) {
+                        if (botSleeping) {
+                            if (fs.existsSync(outputPath)) fs.unlinkSync(outputPath);
+                            continue;
+                        }
                         await sock.sendMessage(remoteJid, { video: { url: outputPath }, caption: `Here is your video for: ${query}` });
                         fs.unlinkSync(outputPath);
                     } else {
                         await sock.sendMessage(remoteJid, { text: '❌ Failed to locate video file.' });
                     }
                 } catch (err) {
-                    await sock.sendMessage(remoteJid, { text: `❌ Download Error: ${err.message}` });
+                    console.error("❌ Download Error:", err.message);
                     if (fs.existsSync(outputPath)) fs.unlinkSync(outputPath);
                 }
             }
@@ -621,6 +661,7 @@ async function startBot() {
                     const res = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(query)}`);
                     const data = await res.json();
                     if (data.extract) {
+                        if (botSleeping) continue;
                         await sock.sendMessage(remoteJid, { text: `📖 *Wikipedia: ${data.title}*\n\n${data.extract}\n\n🔗 ${data.content_urls?.desktop?.page || ''}` });
                     } else {
                         await sock.sendMessage(remoteJid, { text: '❌ No Wikipedia article found.' });
@@ -631,16 +672,18 @@ async function startBot() {
             }
 
             if (baseWord === 'trivia') {
+                if (botSleeping) continue;
                 try {
                     const prompt = "Generate a fun trivia question. Format strictly as:\nQUESTION: [question]\nA) [opt1]\nB) [opt2]\nC) [opt3]\nD) [opt4]\nANSWER: [A/B/C/D]";
                     const response = await callGemini({ contents: prompt });
+                    if (botSleeping) continue;
                     const content = response.text;
                     const answerMatch = content.match(/ANSWER:\s*([A-D])/i);
                     const correctAnswer = answerMatch ? answerMatch[1].toUpperCase() : 'A';
                     activeTrivia.set(remoteJid, correctAnswer);
                     await sock.sendMessage(remoteJid, { text: `🧠 *Trivia Time!*\n\n${content}\n\n_Reply with A, B, C, or D to answer!_` });
                 } catch (err) {
-                    await sock.sendMessage(remoteJid, { text: '❌ Error generating trivia.' });
+                    console.error("❌ Trivia Error:", err.message);
                 }
             }
 
@@ -660,12 +703,17 @@ async function startBot() {
                     fs.writeFileSync(inputPath, buffer);
                     await runCommand(`ffmpeg -i "${inputPath}" -vcodec libwebp -vf "scale=512:512:force_original_aspect_ratio=decrease,format=rgba,pad=512:512:(ow-ih)/2:(oh-ih)/2:color=#00000000" -q:v 60 "${outputPath}"`);
                     if (fs.existsSync(outputPath)) {
+                        if (botSleeping) {
+                            if (fs.existsSync(outputPath)) fs.unlinkSync(outputPath);
+                            if (fs.existsSync(inputPath)) fs.unlinkSync(inputPath);
+                            continue;
+                        }
                         await sock.sendMessage(remoteJid, { sticker: { url: outputPath } });
                         fs.unlinkSync(inputPath);
                         fs.unlinkSync(outputPath);
                     }
                 } catch (err) {
-                    await sock.sendMessage(remoteJid, { text: `❌ Sticker Error: ${err.message}` });
+                    console.error("❌ Sticker Error:", err.message);
                 }
             }
 
@@ -681,15 +729,20 @@ async function startBot() {
                     const pyScript = `from gtts import gTTS; tts = gTTS(text='${prompt.replace(/'/g, "\\'")}', lang='en'); tts.save('${audioPath}')`;
                     await runCommand(`python -c "${pyScript}"`);
                     if (fs.existsSync(audioPath)) {
+                        if (botSleeping) {
+                            if (fs.existsSync(audioPath)) fs.unlinkSync(audioPath);
+                            continue;
+                        }
                         await sock.sendMessage(remoteJid, { audio: { url: audioPath }, mimetype: 'audio/mp4', ptt: true });
                         fs.unlinkSync(audioPath);
                     }
                 } catch (err) {
-                    await sock.sendMessage(remoteJid, { text: `❌ TTS Error: ${err.message}` });
+                    console.error("❌ TTS Error:", err.message);
                 }
             }
 
             if (baseWord === 'tr') {
+                if (botSleeping) continue;
                 const args = text.replace(/^[!]?tr\s*/i, '').trim();
                 if (!args) {
                     await sock.sendMessage(remoteJid, { text: 'Usage: tr <language> <text>' });
@@ -699,9 +752,10 @@ async function startBot() {
                     const response = await callGemini({
                         contents: `Translate the following statement strictly into ${args}. Only return the translation text.`,
                     });
+                    if (botSleeping) continue;
                     await sock.sendMessage(remoteJid, { text: `🌐 *Translation:*\n${response.text}` });
                 } catch (err) {
-                    await sock.sendMessage(remoteJid, { text: `❌ Translation Error: ${err.message}` });
+                    console.error("❌ Translation Error:", err.message);
                 }
             }
 
@@ -716,6 +770,7 @@ async function startBot() {
                 }
                 await sock.sendMessage(remoteJid, { text: `⏰ Reminder set for ${minutes} minute(s) from now!` });
                 setTimeout(async () => {
+                    if (botSleeping) return;
                     await sock.sendMessage(remoteJid, { text: `🔔 *REMINDER:* ${reminderMsg}` });
                 }, minutes * 60 * 1000);
             }
@@ -750,6 +805,7 @@ async function startBot() {
                 const originalMsg = messageStore.get(deletedKeyId);
                 if (originalMsg) {
                     try {
+                        if (botSleeping) continue;
                         await sock.sendMessage(originalMsg.remoteJid, { 
                             text: `🚨 *ANTI-DELETE RECOVERY*\n👤 *Sender:* ${originalMsg.sender}\n⏰ *Time:* ${originalMsg.timestamp}\n\nDeleted message was:\n"${originalMsg.message.conversation || originalMsg.message.extendedTextMessage?.text || '[Media/Attachment]'}"` 
                         });
