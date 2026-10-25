@@ -9,6 +9,14 @@ import http from 'http';
 
 dotenv.config();
 
+// Prevent Node.js from crashing on unhandled stream or API rejections
+process.on('uncaughtException', (err) => {
+    console.error('⚠️ Uncaught Exception:', err.message);
+});
+process.on('unhandledRejection', (reason) => {
+    console.error('⚠️ Unhandled Rejection:', reason);
+});
+
 const geminiKeys = [
     process.env.GEMINI_KEY_1,
     process.env.GEMINI_KEY_2,
@@ -27,17 +35,15 @@ async function callGemini(payload) {
             const aiClient = new GoogleGenAI({ apiKey: currentKey });
             
             const requestPayload = { model: 'gemini-3.8-flash', ...payload };
-
             const response = await aiClient.models.generateContent(requestPayload);
             return response;
         } catch (err) {
             console.warn(`⚠️ API Key [Index ${activeKeyIndex}] failed: ${err.message}. Rotating...`);
             activeKeyIndex = (activeKeyIndex + 1) % geminiKeys.length;
             attempts++;
-            // Brief pause on failure to help bypass rate limits
             await new Promise(resolve => setTimeout(resolve, 1000));
             if (attempts >= geminiKeys.length) {
-                throw new Error("All Gemini API keys have exhausted their quotas or are experiencing 503 high demand.");
+                throw new Error("All Gemini API keys have exhausted their quotas or are experiencing high demand.");
             }
         }
     }
@@ -82,9 +88,12 @@ async function startBot() {
             qrcode.generate(qr, { small: true });
         }
         if (connection === 'close') {
-            const shouldReconnect = lastDisconnect?.error?.output?.statusCode !== DisconnectReason.loggedOut;
-            console.log(`🔌 Connection closed. Reconnecting: ${shouldReconnect}`);
-            if (shouldReconnect) startBot();
+            const statusCode = lastDisconnect?.error?.output?.statusCode;
+            const shouldReconnect = statusCode !== DisconnectReason.loggedOut;
+            console.log(`🔌 Connection closed. StatusCode: ${statusCode}, Reconnecting: ${shouldReconnect}`);
+            if (shouldReconnect) {
+                setTimeout(() => startBot(), 3000); // Wait 3 seconds before reconnecting to clear conflicts
+            }
         } else if (connection === 'open') {
             console.log('\n✅ Ultimate WhatsApp AI Bot (Powered by cold.era10) is active!\n');
         }
@@ -193,7 +202,7 @@ async function startBot() {
                     continue;
                 } catch (err) {
                     console.error("❌ Direct DM/AI Error:", err.message);
-                    await sock.sendMessage(remoteJid, { text: `⚠️ AI is experiencing high demand (503). Retrying shortly... (${err.message})` });
+                    await sock.sendMessage(remoteJid, { text: `⚠️ AI is experiencing high demand. Retrying...` });
                     continue;
                 }
             }
