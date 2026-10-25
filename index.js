@@ -78,14 +78,15 @@ function runCommand(cmd) {
 async function startBot() {
     const { state, saveCreds } = await useMultiFileAuthState('auth_info_baileys');
     
-    // Fixed: Added connection and query timeouts to fix the 408 Timeout issue on Render
+    // Fixed: Added stable browser profile and connection timeouts to resolve initialization 408 timeouts
     const sock = makeWASocket({ 
         auth: state, 
         printQRInTerminal: false,
         markOnlineOnConnect: true,
         shouldSyncHistoryMessage: () => false,
         connectTimeoutMs: 60_000,
-        defaultQueryTimeoutMs: 60_000
+        defaultQueryTimeoutMs: 60_000,
+        browser: ["Ubuntu", "Chrome", "22.04.4"]
     });
 
     sock.ev.on('creds.update', saveCreds);
