@@ -26,7 +26,7 @@ async function callGemini(payload) {
             const currentKey = geminiKeys[activeKeyIndex];
             const aiClient = new GoogleGenAI({ apiKey: currentKey });
             
-            const requestPayload = { model: 'gemini-3.8-flash', ...payload };
+            const requestPayload = { model: 'gemini-2.5-flash', ...payload };
 
             const response = await aiClient.models.generateContent(requestPayload);
             return response;
@@ -34,10 +34,9 @@ async function callGemini(payload) {
             console.warn(`⚠️ API Key [Index ${activeKeyIndex}] failed: ${err.message}. Rotating...`);
             activeKeyIndex = (activeKeyIndex + 1) % geminiKeys.length;
             attempts++;
-            // Brief pause on failure to help bypass rate limits
             await new Promise(resolve => setTimeout(resolve, 1000));
             if (attempts >= geminiKeys.length) {
-                throw new Error("All Gemini API keys have exhausted their quotas or are experiencing 503 high demand.");
+                throw new Error("All Gemini API keys have exhausted their quotas or are experiencing high demand.");
             }
         }
     }
@@ -193,7 +192,7 @@ async function startBot() {
                     continue;
                 } catch (err) {
                     console.error("❌ Direct DM/AI Error:", err.message);
-                    await sock.sendMessage(remoteJid, { text: `⚠️ AI is experiencing high demand (503). Retrying shortly... (${err.message})` });
+                    await sock.sendMessage(remoteJid, { text: `⚠️ AI is experiencing high demand. Retrying shortly... (${err.message})` });
                     continue;
                 }
             }
