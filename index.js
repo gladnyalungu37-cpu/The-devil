@@ -1,4 +1,4 @@
-import { makeWASocket, useMultiFileAuthState, DisconnectReason, downloadMediaMessage } from '@whiskeysockets/baileys';
+import { makeWASocket, useMultiFileAuthState, DisconnectReason, downloadMediaMessage, jidNormalizedUser } from '@whiskeysockets/baileys';
 import qrcode from 'qrcode-terminal';
 import { GoogleGenAI } from '@google/genai';
 import dotenv from 'dotenv';
@@ -26,9 +26,7 @@ async function callGemini(payload) {
             const currentKey = geminiKeys[activeKeyIndex];
             const aiClient = new GoogleGenAI({ apiKey: currentKey });
             
-            const requestPayload = typeof payload === 'object' && !payload.model 
-                ? { model: 'gemini-3.8-flash', ...payload } 
-                : { model: 'gemini-3.8-flash', ...payload };
+            const requestPayload = { model: 'gemini-3.8-flash', ...payload };
 
             const response = await aiClient.models.generateContent(requestPayload);
             return response;
@@ -36,8 +34,10 @@ async function callGemini(payload) {
             console.warn(`⚠️ API Key [Index ${activeKeyIndex}] failed: ${err.message}. Rotating...`);
             activeKeyIndex = (activeKeyIndex + 1) % geminiKeys.length;
             attempts++;
+            // Brief pause on failure to help bypass rate limits
+            await new Promise(resolve => setTimeout(resolve, 1000));
             if (attempts >= geminiKeys.length) {
-                throw new Error("All Gemini API keys have exhausted their daily quotas or failed.");
+                throw new Error("All Gemini API keys have exhausted their quotas or are experiencing 503 high demand.");
             }
         }
     }
@@ -83,6 +83,7 @@ async function startBot() {
         }
         if (connection === 'close') {
             const shouldReconnect = lastDisconnect?.error?.output?.statusCode !== DisconnectReason.loggedOut;
+            console.log(`🔌 Connection closed. Reconnecting: ${shouldReconnect}`);
             if (shouldReconnect) startBot();
         } else if (connection === 'open') {
             console.log('\n✅ Ultimate WhatsApp AI Bot (Powered by cold.era10) is active!\n');
@@ -90,6 +91,7 @@ async function startBot() {
     });
 
     sock.ev.on('messages.upsert', async ({ messages, type }) => {
+        console.log(`📥 [messages.upsert triggered] Type: ${type}, Count: ${messages.length}`);
         if (type !== 'notify' && type !== 'append') return;
 
         for (const msg of messages) {
@@ -120,10 +122,13 @@ async function startBot() {
             const isGroup = remoteJid.endsWith('@g.us');
             const senderName = msg.pushName || (msg.key.fromMe ? 'Bot Owner' : 'Friend');
 
-            logMessageToDisk(isGroup ? 'Group' : 'Private', senderName, msgContent.conversation || msgContent.extendedTextMessage?.text || '[Media]');
-
             const rawText = msgContent.conversation || msgContent.extendedTextMessage?.text || msgContent.imageMessage?.caption || '';
             const text = rawText.trim();
+
+            console.log(`💬 Message from [${senderName}] in [${remoteJid}]: "${text || '[Media]'}"`);
+
+            logMessageToDisk(isGroup ? 'Group' : 'Private', senderName, text || '[Media]');
+
             const lowerText = text.toLowerCase();
             const baseWord = lowerText.replace(/^!/, '').split(' ')[0];
 
@@ -167,7 +172,10 @@ async function startBot() {
             }
 
             const quotedContext = msgContent.extendedTextMessage?.contextInfo;
-            const isQuotingBot = quotedContext?.participant === sock.user?.id;
+            const botJidNormalized = sock.user?.id ? jidNormalizedUser(sock.user.id) : '';
+            const quotedParticipantNormalized = quotedContext?.participant ? jidNormalizedUser(quotedContext.participant) : '';
+            const isQuotingBot = botJidNormalized && quotedParticipantNormalized && quotedParticipantNormalized === botJidNormalized;
+
             if ((!isGroup && text && !isCommand) || (isQuotingBot && text && !isCommand)) {
                 const currentMode = userModes.get(remoteJid) || 'friend';
                 let sysInstruction = "You are a warm, casual, and supportive friend on WhatsApp.";
@@ -178,13 +186,16 @@ async function startBot() {
 
                 try {
                     const response = await callGemini({
-                        model: 'gemini-3.8-flash',
                         contents: text,
                         config: { systemInstruction: sysInstruction }
                     });
                     await sock.sendMessage(remoteJid, { text: response.text });
                     continue;
-                } catch (err) {}
+                } catch (err) {
+                    console.error("❌ Direct DM/AI Error:", err.message);
+                    await sock.sendMessage(remoteJid, { text: `⚠️ AI is experiencing high demand (503). Retrying shortly... (${err.message})` });
+                    continue;
+                }
             }
 
             if (baseWord === 'menu' || baseWord === 'help') {
@@ -238,7 +249,7 @@ async function startBot() {
                     continue;
                 }
                 try {
-                    const response = await callGemini({ model: 'gemini-3.8-flash', contents: prompt });
+                    const response = await callGemini({ contents: prompt });
                     await sock.sendMessage(remoteJid, { text: response.text });
                 } catch (err) {
                     await sock.sendMessage(remoteJid, { text: `❌ AI Error: ${err.message}` });
@@ -329,7 +340,6 @@ async function startBot() {
                 try {
                     await sock.sendMessage(remoteJid, { text: '🎙️ Thinking and recording response...' });
                     const aiResponse = await callGemini({
-                        model: 'gemini-3.8-flash',
                         contents: prompt,
                         config: { systemInstruction: "Respond like a close friend in 2-3 short, spoken sentences." }
                     });
@@ -386,7 +396,6 @@ async function startBot() {
                 try {
                     await sock.sendMessage(remoteJid, { text: `⚽ Fetching latest updates for *${team}*...` });
                     const response = await callGemini({
-                        model: 'gemini-3.8-flash',
                         contents: `Provide the latest match scores, upcoming fixtures, and team news for ${team}. Format nicely with emojis.`
                     });
                     await sock.sendMessage(remoteJid, { text: response.text });
@@ -492,7 +501,6 @@ async function startBot() {
                 }
                 try {
                     const response = await callGemini({
-                        model: 'gemini-3.8-flash',
                         contents: `Summarize the following text into 3 clear bullet points:\n\n"${quotedText}"`,
                     });
                     await sock.sendMessage(remoteJid, { text: `📝 *Summary:*\n\n${response.text}` });
@@ -510,7 +518,6 @@ async function startBot() {
                 }
                 try {
                     const response = await callGemini({
-                        model: 'gemini-3.8-flash',
                         contents: `Analyze this message: "${quotedText}". Provide key insights, tone, and a brief summary.`,
                     });
                     await sock.sendMessage(remoteJid, { text: response.text });
@@ -529,7 +536,6 @@ async function startBot() {
                 try {
                     await sock.sendMessage(remoteJid, { text: '🔍 Analyzing full chat history...' });
                     const response = await callGemini({
-                        model: 'gemini-3.8-flash',
                         contents: `Here is a transcript of recent messages from this WhatsApp chat:\n\n${formattedHistory}\n\nPlease analyze the interaction. Summarize key topics, emotional tone, and main takeaways.`,
                     });
                     await sock.sendMessage(remoteJid, { text: response.text });
@@ -551,7 +557,6 @@ async function startBot() {
                     const buffer = await downloadMediaMessage(targetMsg, 'buffer', {});
                     const base64Image = buffer.toString('base64');
                     const response = await callGemini({
-                        model: 'gemini-3.8-flash',
                         contents: [
                             { inlineData: { mimeType: 'image/jpeg', data: base64Image } },
                             { text: 'Describe what you see in this image in detail, including text, objects, and overall context.' }
@@ -629,7 +634,7 @@ async function startBot() {
             if (baseWord === 'trivia') {
                 try {
                     const prompt = "Generate a fun trivia question. Format strictly as:\nQUESTION: [question]\nA) [opt1]\nB) [opt2]\nC) [opt3]\nD) [opt4]\nANSWER: [A/B/C/D]";
-                    const response = await callGemini({ model: 'gemini-3.8-flash', contents: prompt });
+                    const response = await callGemini({ contents: prompt });
                     const content = response.text;
                     const answerMatch = content.match(/ANSWER:\s*([A-D])/i);
                     const correctAnswer = answerMatch ? answerMatch[1].toUpperCase() : 'A';
@@ -693,7 +698,6 @@ async function startBot() {
                 }
                 try {
                     const response = await callGemini({
-                        model: 'gemini-3.8-flash',
                         contents: `Translate the following statement strictly into ${args}. Only return the translation text.`,
                     });
                     await sock.sendMessage(remoteJid, { text: `🌐 *Translation:*\n${response.text}` });
