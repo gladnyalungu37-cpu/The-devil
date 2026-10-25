@@ -1,0 +1,440 @@
+import { makeWASocket, useMultiFileAuthState, DisconnectReason, downloadMediaMessage } from '@whiskeysockets/baileys';
+import qrcode from 'qrcode-terminal';
+import { GoogleGenAI } from '@google/genai';
+import dotenv from 'dotenv';
+import { exec } from 'child_process';
+import fs from 'fs';
+import path from 'path';
+
+dotenv.config();
+
+const geminiKeys = [
+    process.env.GEMINI_KEY_1,
+    process.env.GEMINI_KEY_2,
+    process.env.GEMINI_KEY_3,
+    process.env.GEMINI_KEY_4
+].filter(Boolean);
+
+let activeKeyIndex = 0;
+
+async function callGemini(payload) {
+    if (geminiKeys.length === 0) throw new Error("No API keys found in environment variables.");
+    let attempts = 0;
+    while (attempts < geminiKeys.length) {
+        try {
+            const currentKey = geminiKeys[activeKeyIndex];
+            const aiClient = new GoogleGenAI({ apiKey: currentKey });
+            const response = await aiClient.models.generateContent(payload);
+            return response;
+        } catch (err) {
+            console.warn(`⚠️ API Key [Index ${activeKeyIndex}] failed:${err.message}. Rotating...`);
+            activeKeyIndex = (activeKeyIndex + 1) % geminiKeys.length;
+            attempts++;
+            if (attempts >= geminiKeys.length) {
+                throw new Error("All Gemini API keys have exhausted their daily quotas or failed.");
+            }
+        }
+    }
+}
+
+const chatBuffers = new Map();
+const activeTrivia = new Map();
+const userModes = new Map();
+const cooldowns = new Map();
+const messageStore = new Map();
+const todoLists = new Map();
+const MAX_BUFFER_SIZE = 25;
+let botSleeping = false;
+const startTime = Date.now();
+
+function saveToBuffer(remoteJid, sender, text) {
+    if (!chatBuffers.has(remoteJid)) chatBuffers.set(remoteJid, []);
+    const buffer = chatBuffers.get(remoteJid);
+    buffer.push({ sender, text, timestamp: new Date().toLocaleTimeString() });
+    if (buffer.length > MAX_BUFFER_SIZE) buffer.shift();
+}
+
+function runCommand(cmd) {
+    return new Promise((resolve, reject) => {
+        exec(cmd, { maxBuffer: 1024 * 1024 * 50 }, (error, stdout) => {
+            if (error) return reject(error);
+            resolve(stdout);
+        });
+    });
+}
+
+async function startBot() {
+    const { state, saveCreds } = await useMultiFileAuthState('auth_info_baileys');
+    const sock = makeWASocket({ auth: state, printQRInTerminal: false });
+
+    sock.ev.on('creds.update', saveCreds);
+
+    sock.ev.on('connection.update', (update) => {
+        const { connection, lastDisconnect, qr } = update;
+        if (qr) {
+            console.log('\nScan this QR code in WhatsApp:\n');
+            qrcode.generate(qr, { small: true });
+        }
+        if (connection === 'close') {
+            const shouldReconnect = lastDisconnect?.error?.output?.statusCode !== DisconnectReason.loggedOut;
+            if (shouldReconnect) startBot();
+        } else if (connection === 'open') {
+            console.log('\n✅ Ultimate WhatsApp AI Bot (Powered by cold.era10) is active!\n');
+        }
+    });
+
+    sock.ev.on('messages.upsert', async ({ messages, type }) => {
+        if (type !== 'notify' && type !== 'append') return;
+
+        for (const msg of messages) {
+            if (!msg.message) continue;
+            
+            if (msg.key && msg.key.id) {
+                messageStore.set(msg.key.id, {
+                    remoteJid: msg.key.remoteJid,
+                    sender: msg.pushName || 'Someone',
+                    message: msg.message,
+                    timestamp: new Date().toLocaleTimeString()
+                });
+                if (messageStore.size > 500) {
+                    messageStore.delete(messageStore.keys().next().value);
+                }
+            }
+
+            if (msg.key && msg.key.remoteJid === 'status@broadcast') {
+                try { await sock.readMessages([msg.key]); } catch (err) {}
+                continue;
+            }
+
+            let msgContent = msg.message;
+            if (msgContent.ephemeralMessage) msgContent = msgContent.ephemeralMessage.message;
+
+            const remoteJid = msg.key.remoteJid;
+            const senderJid = msg.key.participant || msg.key.remoteJid;
+            const isGroup = remoteJid.endsWith('@g.us');
+            const senderName = msg.pushName || (msg.key.fromMe ? 'Bot Owner' : 'Friend');
+
+            logMessageToDisk(isGroup ? 'Group' : 'Private', senderName, msgContent.conversation || msgContent.extendedTextMessage?.text || '[Media]');
+
+            const rawText = msgContent.conversation || msgContent.extendedTextMessage?.text || msgContent.imageMessage?.caption || '';
+            const text = rawText.trim();
+            const lowerText = text.toLowerCase();
+            const baseWord = lowerText.replace(/^!/, '').split(' ')[0];
+
+            if (baseWord === 'neymar') {
+                botSleeping = !botSleeping;
+                await sock.sendMessage(remoteJid, { text: botSleeping ? '💤 *Bot is now resting (Sleeping Mode ON).*' : '⚡ *Bot is fully awake and active!*' });
+                continue;
+            }
+
+            if (botSleeping && !msg.key.fromMe) continue;
+
+            const isViewOnce = msgContent.viewOnceMessage || msgContent.viewOnceMessageV2 || msgContent.imageMessage?.viewOnce || msgContent.videoMessage?.viewOnce;
+            if (isViewOnce) {
+                try {
+                    const actualMsg = msgContent.viewOnceMessage?.message || msgContent.viewOnceMessageV2?.message || msgContent;
+                    const isImage = actualMsg.imageMessage;
+                    const isVideo = actualMsg.videoMessage;
+                    if (isImage || isVideo) {
+                        await sock.sendMessage(remoteJid, { text: '🔓 *Intercepting View-Once Media...*' });
+                        const buffer = await downloadMediaMessage({ message: actualMsg, key: msg.key }, 'buffer', {});
+                        const ext = isImage ? 'jpg' : 'mp4';
+                        const savePath = path.join(process.cwd(), `viewonce_${Date.now()}.${ext}`);
+                        fs.writeFileSync(savePath, buffer);
+                        if (isImage) {
+                            await sock.sendMessage(remoteJid, { image: { url: savePath }, caption: '🔓 *View-Once Photo Unlocked & Saved!*' });
+                        } else {
+                            await sock.sendMessage(remoteJid, { video: { url: savePath }, caption: '🔓 *View-Once Video Unlocked & Saved!*' });
+                        }
+                        if (fs.existsSync(savePath)) fs.unlinkSync(savePath);
+                        continue;
+                    }
+                } catch (err) {}
+            }
+
+            const commandKeywords = [
+                'menu', 'help', 'ai', 'talk', 'mode', 'imagine', 'match',
+                'football', 'tagall', 'hidetag', 'meme', 'summarize', 'analyze',
+                'analyzechat', 'describe', 'song', 'video', 'wiki',
+                'trivia', 'sticker', 'tts', 'tr', 'remind', 'search', 'calc', 'ping', 'status',
+                'map', 'nav', 'weather', 'qr', 'todo', 'todos', 'cleartodos'
+            ];
+            const isCommand = commandKeywords.includes(baseWord);
+
+            if (activeTrivia.has(remoteJid) && ['A', 'B', 'C', 'D'].includes(text.toUpperCase()) && text.length === 1) {
+                const correct = activeTrivia.get(remoteJid);
+                if (text.toUpperCase() === correct) {
+                    await sock.sendMessage(remoteJid, { text: `🎉 Correct ${senderName}! Option *${correct}* is right.` });
+                } else {
+                    await sock.sendMessage(remoteJid, { text: `❌ Incorrect ${senderName}! It was *${correct}*.` });
+                }
+                activeTrivia.delete(remoteJid);
+                continue;
+            }
+
+            if (text && !isCommand) saveToBuffer(remoteJid, senderName, text);
+
+            if (isCommand) {
+                const now = Date.now();
+                if (now - (cooldowns.get(senderJid) || 0) < 3000) {
+                    await sock.sendMessage(remoteJid, { text: '⏳ *Please wait a few seconds before using another command!*' });
+                    continue;
+                }
+                cooldowns.set(senderJid, now);
+            }
+
+            const quotedContext = msgContent.extendedTextMessage?.contextInfo;
+            const isQuotingBot = quotedContext?.participant === sock.user?.id;
+            if ((!isGroup && text && !isCommand) || (isQuotingBot && text && !isCommand)) {
+                const currentMode = userModes.get(remoteJid) || 'friend';
+                let sysInstruction = "You are a warm, casual, and supportive friend on WhatsApp.";
+                if (currentMode === 'normal') sysInstruction = "You are a fast WhatsApp assistant.";
+                if (currentMode === 'roast') sysInstruction = "You are a witty assistant with sarcastic banter.";
+                if (currentMode === 'tutor') sysInstruction = "You are an educational tutor.";
+                if (currentMode === 'hype') sysInstruction = "You are a high-energy hype assistant!";
+
+                try {
+                    const response = await callGemini({
+                        model: 'gemini-1.5-flash',
+                        contents: text,
+                        config: { systemInstruction: sysInstruction }
+                    });
+                    await sock.sendMessage(remoteJid, { text: response.text });
+                    continue;
+                } catch (err) {}
+            }
+
+            if (baseWord === 'menu' || baseWord === 'help') {
+                const menuText = `📖 *COMPLETE BOT COMMAND GUIDE* 📖\n` +
+                    `⚡ *Powered by cold.era10*\n` +
+                    `───────────────────────────\n\n` +
+                    `🧠 *AI & PERSONALITY COMMANDS*\n` +
+                    `• Direct DM Chat : Just text the bot directly with no prefix! *(AI)*\n` +
+                    `• !ai <prompt> : Explicitly ask Gemini a question. *(AI)*\n` +
+                    `  └ Example: !ai What are the main rules of basketball?\n` +
+                    `• !talk <prompt> : Get AI responses back as a Voice Note. *(AI)*\n` +
+                    `  └ Example: !talk Tell me a funny joke\n` +
+                    `• !analyze : Reply to any message to analyze tone & context. *(AI)*\n` +
+                    `• !analyzechat : Complete chat history analytics. *(AI)*\n` +
+                    `• !describe : Send/reply to a photo for AI vision inspection. *(AI)*\n` +
+                    `• !mode <persona> : Change AI tone (normal, friend, roast, tutor, hype). *(AI)*\n\n` +
+                    `🎨 *MEDIA & CREATIVE COMMANDS*\n` +
+                    `• !imagine <prompt> : Generate AI artwork from text. *(AI)*\n` +
+                    `  └ Example: !imagine futuristic sports car in space\n` +
+                    `• !song <title/artist> : Download MP3 audio. *(AI-Free)*\n` +
+                    `  └ Example: !song Drake Passionfruit\n` +
+                    `• !video <title> : Download MP4 video. *(AI-Free)*\n` +
+                    `  └ Example: !video Barcelona vs Real Madrid highlights\n` +
+                    `• !sticker : Send/reply to an image to convert to sticker. *(AI-Free)*\n` +
+                    `• !meme <top | bottom> : Overlay meme text onto photos. *(AI-Free)*\n` +
+                    `  └ Example: !meme When the code works | on the first try\n` +
+                    `• !tts <text> : Convert text to custom audio voice note. *(AI-Free)*\n\n` +
+                    `⚽ *SPORTS & UTILITIES*\n` +
+                    `• !match <team> : Live scores & upcoming match status. *(AI)*\n` +
+                    `  └ Example: !match Barcelona\n` +
+                    `• !summarize : Reply to long text for a bullet point summary. *(AI)*\n` +
+                    `• !wiki <topic> : Fetch Wikipedia facts & summary. *(AI-Free)*\n` +
+                    `• !tr <lang> <text> : Instant translation. *(AI)*\n` +
+                    `  └ Example: !tr Spanish Good morning my friend\n` +
+                    `• !remind <mins> <text> : Set a timer reminder notification. *(AI-Free)*\n` +
+                    `  └ Example: !remind 10 Check the food in the oven\n` +
+                    `• !trivia : Play interactive quiz questions. *(AI)*\n` +
+                    `• !search <query> : Search saved chat logs. *(AI-Free)*\n` +
+                    `• !calc <expr> : Fast math calculation engine. *(AI-Free)*\n` +
+                    `• !ping / !status : Check bot uptime & key status. *(AI-Free)*\n` +
+                    `• !map <destination> : Instant GPS map & direction links. *(AI-Free)*\n` +
+                    `  └ Example: !map Johannesburg\n` +
+                    `• !weather <city> : Real-time weather forecast lookup. *(AI-Free)*\n` +
+                    `  └ Example: !weather Bushbuckridge\n` +
+                    `• !qr <text/link> : Generate a scannable QR code image. *(AI-Free)*\n` +
+                    `  └ Example: !qr https://google.com\n` +
+                    `• !todo <task> : Add a task to your chat to-do list. *(AI-Free)*\n` +
+                    `• !todos : View your active chat to-do list. *(AI-Free)*\n` +
+                    `• !cleartodos : Clear your chat to-do list. *(AI-Free)*\n\n` +
+                    `👥 *GROUP TOOLS*\n` +
+                    `• !tagall <msg> : Mention all group members visibly. *(AI-Free)*\n` +
+                    `• !hidetag <msg> : Invisible mass group mention. *(AI-Free)*\n\n` +
+                    `🔓 *AUTOMATION & CONTROLS*\n` +
+                    `• !Neymar : Sleep / Wake bot toggle. *(AI-Free)*\n` +
+                    `• View Once Saver : Auto-captures View-Once media. *(AI-Free)*\n` +
+                    `• Anti-Delete Recovery : Auto-reposts deleted texts. *(AI-Free)*\n` +
+                    `• Background Logger : Silently indexes chat activity. *(AI-Free)*\n` +
+                    `───────────────────────────`;
+                await sock.sendMessage(remoteJid, { text: menuText });
+                continue;
+            }
+
+            if (baseWord === 'ai') {
+                const prompt = text.replace(/^[!]?ai\s*/i, '').trim();
+                if (!prompt) {
+                    await sock.sendMessage(remoteJid, { text: 'Please ask a question! Example: ai What is gravity?' });
+                    continue;
+                }
+                try {
+                    const response = await callGemini({ model: 'gemini-1.5-flash', contents: prompt });
+                    await sock.sendMessage(remoteJid, { text: response.text });
+                } catch (err) {
+                    await sock.sendMessage(remoteJid, { text: `❌ AI Error: ${err.message}` });
+                }
+            }
+
+            if (baseWord === 'map' || baseWord === 'nav') {
+                const query = text.replace(/^[!]?(map|nav)\s*/i, '').trim();
+                if (!query) {
+                    await sock.sendMessage(remoteJid, { text: '⚠️ Please specify a destination!\nExample: `!map Johannesburg`' });
+                    continue;
+                }
+                const encoded = encodeURIComponent(query);
+                await sock.sendMessage(remoteJid, { 
+                    text: `🗺️ *GPS & Navigation Finder*\n\n📍 *Destination:* ${query}\n\n🌐 *View on Map:* https://www.google.com/maps/search/?api=1&query=${encoded}\n🚗 *Get Directions:* https://www.google.com/maps/dir/?api=1&destination=${encoded}\n\n⚡ _Zero AI quota used!_` 
+                });
+                continue;
+            }
+
+            if (baseWord === 'weather') {
+                const city = text.replace(/^[!]?weather\s*/i, '').trim();
+                if (!city) {
+                    await sock.sendMessage(remoteJid, { text: '⚠️ Please specify a city!\nExample: `!weather Bushbuckridge`' });
+                    continue;
+                }
+                try {
+                    const res = await fetch(`https://wttr.in/${encodeURIComponent(city)}?format=3`);
+                    const weatherText = await res.text();
+                    await sock.sendMessage(remoteJid, { text: `🌤️ *Weather Forecast*\n\n${weatherText.trim()}\n\n⚡ _Zero AI quota used!_` });
+                } catch (err) {
+                    await sock.sendMessage(remoteJid, { text: '❌ Error fetching weather data.' });
+                }
+                continue;
+            }
+
+            if (baseWord === 'qr') {
+                const qrData = text.replace(/^[!]?qr\s*/i, '').trim();
+                if (!qrData) {
+                    await sock.sendMessage(remoteJid, { text: '⚠️ Please provide text or a link for the QR code!\nExample: `!qr https://google.com`' });
+                    continue;
+                }
+                try {
+                    const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(qrData)}`;
+                    await sock.sendMessage(remoteJid, { image: { url: qrUrl }, caption: `📱 *Generated QR Code*\nData: ${qrData}\n\n⚡ _Zero AI quota used!_` });
+                } catch (err) {
+                    await sock.sendMessage(remoteJid, { text: '❌ Error generating QR code.' });
+                }
+                continue;
+            }
+
+            if (baseWord === 'todo') {
+                const task = text.replace(/^[!]?todo\s*/i, '').trim();
+                if (!task) {
+                    await sock.sendMessage(remoteJid, { text: '⚠️ Please specify a task!\nExample: `!todo Finish math homework`' });
+                    continue;
+                }
+                if (!todoLists.has(remoteJid)) todoLists.set(remoteJid, []);
+                const list = todoLists.get(remoteJid);
+                list.push(task);
+                await sock.sendMessage(remoteJid, { text: `✅ *Task Added (#${list.length}):*\n${task}\n\n_Type \`!todos\` to view your list._` });
+                continue;
+            }
+
+            if (baseWord === 'todos') {
+                const list = todoLists.get(remoteJid) || [];
+                if (list.length === 0) {
+                    await sock.sendMessage(remoteJid, { text: '📋 Your to-do list is empty! Add a task using `!todo <task>`.' });
+                    continue;
+                }
+                let responseText = `📋 *Your To-Do List:*\n\n` + list.map((t, index) => `${index + 1}.${t}`).join('\n');
+                responseText += `\n\n_Type \`!cleartodos\` to clear the list._`;
+                await sock.sendMessage(remoteJid, { text: responseText });
+                continue;
+            }
+
+            if (baseWord === 'cleartodos') {
+                todoLists.set(remoteJid, []);
+                await sock.sendMessage(remoteJid, { text: '🗑️ Your to-do list has been cleared!' });
+                continue;
+            }
+
+            if (baseWord === 'talk') {
+                const prompt = text.replace(/^[!]?talk\s*/i, '').trim();
+                if (!prompt) {
+                    await sock.sendMessage(remoteJid, { text: 'Say something! Example: talk How are you today?' });
+                    continue;
+                }
+                try {
+                    await sock.sendMessage(remoteJid, { text: '🎙️ Thinking and recording response...' });
+                    const aiResponse = await callGemini({
+                        model: 'gemini-1.5-flash',
+                        contents: prompt,
+                        config: { systemInstruction: "Respond like a close friend in 2-3 short, spoken sentences." }
+                    });
+                    const audioPath = path.join(process.cwd(), `talk_${Date.now()}.mp3`);
+                    const pyScript = `from gtts import gTTS; tts = gTTS(text='${aiResponse.text.replace(/'/g, "\\'")}', lang='en'); tts.save('${audioPath}')`; await runCommand(`python -c "${pyScript}"`);
+                    if (fs.existsSync(audioPath)) {
+                        await sock.sendMessage(remoteJid, { audio: { url: audioPath }, mimetype: 'audio/mp4', ptt: true });
+                        fs.unlinkSync(audioPath);
+                    }
+                } catch (err) {
+                    await sock.sendMessage(remoteJid, { text: `❌ Talk Error: ${err.message}` });
+                }
+            }
+
+            if (baseWord === 'mode') {
+                const modeInput = text.replace(/^[!]?mode\s*/i, '').trim().toLowerCase();
+                if (['normal', 'friend', 'roast', 'tutor', 'hype'].includes(modeInput)) {
+                    userModes.set(remoteJid, modeInput);
+                    await sock.sendMessage(remoteJid, { text: `🎭 AI Personality mode set to: *${modeInput.toUpperCase()}*` });
+                } else {
+                    await sock.sendMessage(remoteJid, { text: 'Available modes: `mode friend`, `mode normal`, `mode roast`, `mode tutor`, `mode hype`' });
+                }
+            }
+
+            if (baseWord === 'imagine') {
+                const prompt = text.replace(/^[!]?imagine\s*/i, '').trim();
+                if (!prompt) {
+                    await sock.sendMessage(remoteJid, { text: 'Specify what to draw! Example: imagine futuristic sports car on Mars' });
+                    continue;
+                }
+                try {
+                    await sock.sendMessage(remoteJid, { text: `🎨 Generating image for: "${prompt}"...` });
+                    const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}`; const imagePath = path.join(process.cwd(), `art_${Date.now()}.jpg`);
+                    const res = await fetch(imageUrl);
+                    const arrayBuffer = await res.arrayBuffer();
+                    fs.writeFileSync(imagePath, Buffer.from(arrayBuffer));
+                    if (fs.existsSync(imagePath)) {
+                        await sock.sendMessage(remoteJid, { image: { url: imagePath }, caption: `✨ *AI Artwork:* ${prompt}\n\n⚡ *Powered by cold.era10*` });
+                        fs.unlinkSync(imagePath);
+                    }
+                } catch (err) {
+                    await sock.sendMessage(remoteJid, { text: `❌ Imagine Error: ${err.message}` });
+                }
+            }
+
+            if (baseWord === 'match' || baseWord === 'football') {
+                const team = text.replace(/^[!]?(match|football)\s*/i, '').trim();
+                if (!team) {
+                    await sock.sendMessage(remoteJid, { text: 'Specify a team! Example: match FC Barcelona' });
+                    continue;
+                }
+                try {
+                    await sock.sendMessage(remoteJid, { text: `⚽ Fetching latest updates for *${team}*...` });
+                    const response = await callGemini({
+                        model: 'gemini-1.5-flash',
+                        contents: `Provide the latest match scores, upcoming fixtures, and team news for ${team}. Format nicely with emojis.`
+                    });
+                    await sock.sendMessage(remoteJid, { text: response.text });
+                } catch (err) {
+                    await sock.sendMessage(remoteJid, { text: `❌ Match Info Error: ${err.message}` });
+                }
+            }
+
+            if (baseWord === 'tagall') {
+                if (!isGroup) {
+                    await sock.sendMessage(remoteJid, { text: '⚠️ This command can only be used in group chats!' });
+                    continue;
+                }
+                const customMsg = text.replace(/^[!]?tagall\s*/i, '').trim() || 'Attention everyone!';
+                try {
+                    const groupMetadata = await sock.groupMetadata(remoteJid);
+                    const participants = groupMetadata.participants;
+                    const mentions = participants.map(p => p.id);
+                    let tagMsg = `📢 *GROUP ANNOUNCEMENT*\n⚡ *Powered by cold.era10*\n\n${customMsg}\n\n`; for (const p of participants) { tagMsg += `@${p.id
+

@@ -1,0 +1,171 @@
+import { makeWASocket, useMultiFileAuthState, DisconnectReason, downloadMediaMessage } from '@whiskeysockets/baileys';
+import qrcode from 'qrcode-terminal';
+import { GoogleGenAI } from '@google/genai';
+import dotenv from 'dotenv';
+import { exec } from 'child_process';
+import fs from 'fs';
+import path from 'path';
+import http from 'http';
+
+dotenv.config();
+
+const PORT = process.env.PORT || 3000;
+const server = http.createServer((req, res) => {
+    res.writeHead(200, { 'Content-Type': 'text/plain' });
+    res.end('The-devil WhatsApp Bot is running!\n');
+});
+
+server.listen(PORT, '0.0.0.0', () => {
+    console.log(`HTTP server listening on port ${PORT} for Render health checks.`);
+});
+
+process.on('uncaughtException', (err) => { console.error('Uncaught Exception:', err); });
+process.on('unhandledRejection', (reason) => { console.error('Unhandled Rejection:', reason); });
+
+const geminiKeys = [
+    process.env.GEMINI_KEY_1,
+    process.env.GEMINI_KEY_2,
+    process.env.GEMINI_KEY_3,
+    process.env.GEMINI_KEY_4
+].filter(Boolean);
+let activeKeyIndex = 0;
+
+async function callGemini(payload) {
+    if (geminiKeys.length === 0) throw new Error("No Gemini API keys found.");
+    let attempts = 0;
+    while (attempts < geminiKeys.length) {
+        try {
+            const currentKey = geminiKeys[activeKeyIndex];
+            const aiClient = new GoogleGenAI({ apiKey: currentKey });
+            return await aiClient.models.generateContent(payload);
+        } catch (err) {
+            console.warn(`⚠️ API Key [Index ${activeKeyIndex}] failed: ${err.message}. Rotating...`);
+            activeKeyIndex = (activeKeyIndex + 1) % geminiKeys.length;
+            attempts++;
+            if (attempts >= geminiKeys.length) throw new Error("All Gemini API keys exhausted.");
+        }
+    }
+}
+
+const chatBuffers = new Map();
+const activeTrivia = new Map();
+const userModes = new Map();
+const cooldowns = new Map();
+const messageStore = new Map();
+const todoLists = new Map();
+const MAX_BUFFER_SIZE = 25;
+let botSleeping = false;
+const startTime = Date.now();
+
+function saveToBuffer(remoteJid, sender, text) {
+    if (!chatBuffers.has(remoteJid)) chatBuffers.set(remoteJid, []);
+    const buffer = chatBuffers.get(remoteJid);
+    buffer.push({ sender, text, timestamp: new Date().toLocaleTimeString() });
+    if (buffer.length > MAX_BUFFER_SIZE) buffer.shift();
+}
+
+function runCommand(cmd) {
+    return new Promise((resolve, reject) => {
+        exec(cmd, { maxBuffer: 1024 * 1024 * 50 }, (error, stdout) => {
+            if (error) return reject(error);
+            resolve(stdout);
+        });
+    });
+}
+
+async function startBot() {
+    const { state, saveCreds } = await useMultiFileAuthState('auth_info_baileys');
+    const sock = makeWASocket({ auth: state, printQRInTerminal: false });
+
+    sock.ev.on('creds.update', saveCreds);
+
+    sock.ev.on('connection.update', (update) => {
+        const { connection, lastDisconnect, qr } = update;
+        if (qr) {
+            console.log('\n🔗 SCAN THIS QR CODE IN WHATSAPP:\n');
+            qrcode.generate(qr, { small: true });
+        }
+        if (connection === 'close') {
+            const shouldReconnect = lastDisconnect?.error?.output?.statusCode !== DisconnectReason.loggedOut;
+            if (shouldReconnect) startBot();
+        } else if (connection === 'open') {
+            console.log('\n✅ Ultimate WhatsApp AI Bot is active!\n');
+        }
+    });
+
+    sock.ev.on('messages.upsert', async ({ messages, type }) => {
+        if (type !== 'notify' && type !== 'append') return;
+
+        for (const msg of messages) {
+            if (!msg.message) continue;
+            
+            if (msg.key?.id) {
+                messageStore.set(msg.key.id, {
+                    remoteJid: msg.key.remoteJid,
+                    sender: msg.pushName || 'Someone',
+                    message: msg.message,
+                    timestamp: new Date().toLocaleTimeString()
+                });
+                if (messageStore.size > 500) messageStore.delete(messageStore.keys().next().value);
+            }
+
+            if (msg.key?.remoteJid === 'status@broadcast') {
+                try {
+                    await sock.readMessages([msg.key]);
+                    if (msg.key.participant) {
+                        await sock.sendMessage('status@broadcast', { react: { text: '❤️', key: msg.key } }, { statusJidList: [msg.key.participant] });
+                    }
+                } catch (e) {}
+                continue;
+            }
+
+            let msgContent = msg.message;
+            if (msgContent.ephemeralMessage) msgContent = msgContent.ephemeralMessage.message;
+
+            const remoteJid = msg.key.remoteJid;
+            const senderJid = msg.key.participant || remoteJid;
+            const isGroup = remoteJid.endsWith('@g.us');
+            const senderName = msg.pushName || (msg.key.fromMe ? 'Bot Owner' : 'Friend');
+
+            logMessageToDisk(isGroup ? 'Group' : 'Private', senderName, msgContent.conversation || msgContent.extendedTextMessage?.text || '[Media]');
+
+            const rawText = msgContent.conversation || msgContent.extendedTextMessage?.text || msgContent.imageMessage?.caption || '';
+            const text = rawText.trim();
+            const lowerText = text.toLowerCase();
+            const baseWord = lowerText.replace(/^!/, '').split(' ')[0];
+
+            if (baseWord === 'neymar') {
+                botSleeping = !botSleeping;
+                await sock.sendMessage(remoteJid, { text: botSleeping ? '💤 *Bot is resting (Sleeping Mode ON).*' : '⚡ *Bot is awake and active!*' });
+                continue;
+            }
+
+            if (botSleeping && !msg.key.fromMe) continue;
+
+            const isViewOnce = msgContent.viewOnceMessage || msgContent.viewOnceMessageV2 || msgContent.imageMessage?.viewOnce || msgContent.videoMessage?.viewOnce;
+            if (isViewOnce) {
+                try {
+                    const actualMsg = msgContent.viewOnceMessage?.message || msgContent.viewOnceMessageV2?.message || msgContent;
+                    const isImage = actualMsg.imageMessage;
+                    const isVideo = actualMsg.videoMessage;
+                    if (isImage || isVideo) {
+                        await sock.sendMessage(remoteJid, { text: '🔓 *Intercepting View-Once Media...*' });
+                        const buffer = await downloadMediaMessage({ message: actualMsg, key: msg.key }, 'buffer', {});
+                        const ext = isImage ? 'jpg' : 'mp4';
+                        const savePath = path.join(process.cwd(), `viewonce_${Date.now()}.${ext}`);
+                        fs.writeFileSync(savePath, buffer);
+                        if (isImage) {
+                            await sock.sendMessage(remoteJid, { image: { url: savePath }, caption: '🔓 *View-Once Photo Unlocked!*' });
+                        } else {
+                            await sock.sendMessage(remoteJid, { video: { url: savePath }, caption: '🔓 *View-Once Video Unlocked!*' });
+                        }
+                        if (fs.existsSync(savePath)) fs.unlinkSync(savePath);
+                        continue;
+                    }
+                } catch (err) {
+                    console.error('View-Once Error:', err);
+                }
+            }
+
+            const commandKeywords
+
