@@ -230,7 +230,7 @@ async function startBot() {
                     `• !calc <expr> : Math calculation engine\n` +
                     `• !ping / !status : Check bot uptime & active keys\n` +
                     `• !map <destination> : GPS map links\n` +
-                    `• !weather <city> : Real-time weather forecast lookup\n` +
+                    `• !weather <city> : Real-time weather forecast lookup (°C)\n` +
                     `• !qr <text/link> : Generate QR code image\n` +
                     `• !todo / !todos : Chat to-do list manager\n\n` +
                     `👥 *GROUP TOOLS (AI-FREE)*\n` +
@@ -281,9 +281,9 @@ async function startBot() {
                     continue;
                 }
                 try {
-                    const res = await fetch(`https://wttr.in/${encodeURIComponent(city)}?format=3`);
+                    const res = await fetch(`https://wttr.in/${encodeURIComponent(city)}?format=3&m`);
                     const weatherText = await res.text();
-                    await sock.sendMessage(remoteJid, { text: `🌤️ *Weather Forecast*\n\n${weatherText.trim()}\n\n⚡ _Zero AI quota used!_` });
+                    await sock.sendMessage(remoteJid, { text: `🌤️ *Weather Forecast (°C)*\n\n${weatherText.trim()}\n\n⚡ _Zero AI quota used!_` });
                 } catch (err) {
                     await sock.sendMessage(remoteJid, { text: '❌ Error fetching weather data.' });
                 }
