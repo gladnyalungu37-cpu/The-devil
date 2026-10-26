@@ -80,28 +80,39 @@ async function startBot() {
     // Added socket stability configs to prevent Render network drops
     const sock = makeWASocket({ 
         auth: state, 
-        printQRInTerminal: false, // Handled manually below for clean compact formatting
-        browser: ["Ubuntu", "Chrome", "22.04.4"],
+        printQRInTerminal: false, // Disables QR code generation in terminal
+        browser: ["Chrome", "Desktop", "122.0.0.0"], // Browser persona configured for pairing code
         connectTimeoutMs: 60000,
         keepAliveIntervalMs: 25000
     });
 
     sock.ev.on('creds.update', saveCreds);
 
+    // Request a Pairing Code if device is not registered/connected
+    if (!sock.authState.creds.registered) {
+        const phoneNumber = "27665989026"; // Configured with SA country code (27)
+        
+        setTimeout(async () => {
+            try {
+                let code = await sock.requestPairingCode(phoneNumber);
+                code = code?.match(/.{1,4}/g)?.join("-") || code;
+                console.log(`\n🔗 ==========================================`);
+                console.log(`📱 YOUR WHATSAPP PAIRING CODE: [ ${code} ]`);
+                console.log(`==========================================\n`);
+            } catch (err) {
+                console.error("❌ Failed to generate pairing code:", err.message);
+            }
+        }, 3000);
+    }
+
     sock.ev.on('connection.update', (update) => {
-        const { connection, lastDisconnect, qr } = update;
-        if (qr) {
-            console.log('\nScan this compact QR code in WhatsApp:\n');
-            qrcode.generate(qr, { small: true }, (qrcodeStr) => {
-                console.log(qrcodeStr);
-            });
-        }
+        const { connection, lastDisconnect } = update;
         if (connection === 'close') {
             const statusCode = lastDisconnect?.error?.output?.statusCode;
             console.log(`🔌 Connection closed due to status code: ${statusCode}. Reconnecting...`);
             
             if (statusCode === DisconnectReason.loggedOut) {
-                console.log('❌ Device logged out. Please clear session files and re-scan QR.');
+                console.log('❌ Device logged out. Clearing session files...');
                 if (fs.existsSync('auth_info_baileys')) {
                     fs.rmSync('auth_info_baileys', { recursive: true, force: true });
                 }
