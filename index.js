@@ -95,10 +95,19 @@ async function startBot() {
             qrcode.generate(qr, { small: true });
         }
         if (connection === 'close') {
-            console.log('🔌 Connection closed. Forcing automatic restart...');
+            const statusCode = lastDisconnect?.error?.output?.statusCode;
+            console.log(`🔌 Connection closed due to status code: ${statusCode}. Reconnecting...`);
+            
+            if (statusCode === DisconnectReason.loggedOut) {
+                console.log('❌ Device logged out. Please clear session files and re-scan QR.');
+                if (fs.existsSync('auth_info_baileys')) {
+                    fs.rmSync('auth_info_baileys', { recursive: true, force: true });
+                }
+            }
+
             setTimeout(() => {
                 startBot();
-            }, 3000);
+            }, 5000);
         } else if (connection === 'open') {
             console.log('\n✅ Ultimate WhatsApp AI Bot (Powered by cold.era10) is active!\n');
         }
@@ -820,7 +829,6 @@ async function startBot() {
     });
 
     sock.ev.on('messages.update', async (updates) => {
-        // Do not recover deleted messages if bot is sleeping
         if (botSleeping) return;
         
         for (const update of updates) {
@@ -856,6 +864,15 @@ function logMessageToDisk(chatType, senderName, messageText) {
     if (logs.length > 1500) logs.shift();
     fs.writeFileSync(logFile, JSON.stringify(logs, null, 2));
 }
+
+// Global safety catch blocks to prevent terminal/Render drops from unhandled bugs
+process.on('uncaughtException', (err) => {
+    console.error('⚠️ Uncaught Exception:', err.message);
+});
+
+process.on('unhandledRejection', (reason) => {
+    console.error('⚠️ Unhandled Rejection:', reason);
+});
 
 startBot();
 
