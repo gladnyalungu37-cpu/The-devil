@@ -77,13 +77,15 @@ function runCommand(cmd) {
 async function startBot() {
     const { state, saveCreds } = await useMultiFileAuthState('auth_info_baileys');
     
-    // Added socket stability configs to prevent Render network drops
+    // Added socket stability configs and timeout preventers
     const sock = makeWASocket({ 
         auth: state, 
-        printQRInTerminal: false, // Handled manually below for clean compact formatting
+        printQRInTerminal: false,
         browser: ["Chrome", "Desktop", "122.0.0.0"],
         connectTimeoutMs: 60000,
-        keepAliveIntervalMs: 25000
+        keepAliveIntervalMs: 25000,
+        markOnlineOnConnect: false,
+        syncFullHistory: false
     });
 
     sock.ev.on('creds.update', saveCreds);
@@ -92,10 +94,10 @@ async function startBot() {
         const { connection, lastDisconnect, qr } = update;
         
         if (qr) {
-            console.log('\nScan this QR code in WhatsApp:\n');
-            qrcode.generate(qr, { small: true }, (qrcodeStr) => {
-                console.log(qrcodeStr);
-            });
+            const qrImageUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(qr)}`;
+            console.log(`\n🔗 ==========================================`);
+            console.log(`📱 CLICK THIS LINK TO OPEN A PERFECT SQUARE QR CODE:\n${qrImageUrl}`);
+            console.log(`==========================================\n`);
         }
 
         if (connection === 'open') {
