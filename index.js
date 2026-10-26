@@ -88,23 +88,6 @@ async function startBot() {
 
     sock.ev.on('creds.update', saveCreds);
 
-    // Request a Pairing Code if device is not registered/connected
-    if (!sock.authState.creds.registered) {
-        const phoneNumber = "27665989026"; // Configured with SA country code (27)
-        
-        setTimeout(async () => {
-            try {
-                let code = await sock.requestPairingCode(phoneNumber);
-                code = code?.match(/.{1,4}/g)?.join("-") || code;
-                console.log(`\n🔗 ==========================================`);
-                console.log(`📱 YOUR WHATSAPP PAIRING CODE: [ ${code} ]`);
-                console.log(`==========================================\n`);
-            } catch (err) {
-                console.error("❌ Failed to generate pairing code:", err.message);
-            }
-        }, 3000);
-    }
-
     sock.ev.on('connection.update', (update) => {
         const { connection, lastDisconnect } = update;
         if (connection === 'close') {
@@ -125,6 +108,23 @@ async function startBot() {
             console.log('\n✅ Ultimate WhatsApp AI Bot (Powered by cold.era10) is active!\n');
         }
     });
+
+    // Safely request pairing code only when not registered, with a stable 7-second delay to guarantee handshake
+    if (!sock.authState.creds.registered) {
+        setTimeout(async () => {
+            try {
+                const phoneNumber = "27665989026";
+                console.log(`\n⏳ Requesting secure pairing code for ${phoneNumber}...`);
+                let code = await sock.requestPairingCode(phoneNumber);
+                code = code?.match(/.{1,4}/g)?.join("-") || code;
+                console.log(`\n🔗 ==========================================`);
+                console.log(`📱 YOUR WHATSAPP PAIRING CODE: [ ${code} ]`);
+                console.log(`==========================================\n`);
+            } catch (err) {
+                console.error("❌ Failed to generate pairing code:", err.message);
+            }
+        }, 7000);
+    }
 
     sock.ev.on('messages.upsert', async ({ messages, type }) => {
         console.log(`📥 [messages.upsert triggered] Type: ${type}, Count: ${messages.length}`);
