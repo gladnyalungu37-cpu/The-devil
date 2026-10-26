@@ -80,7 +80,7 @@ async function startBot() {
     // Added socket stability configs to prevent Render network drops
     const sock = makeWASocket({ 
         auth: state, 
-        printQRInTerminal: true,
+        printQRInTerminal: false, // Handled manually below for clean compact formatting
         browser: ["Ubuntu", "Chrome", "22.04.4"],
         connectTimeoutMs: 60000,
         keepAliveIntervalMs: 25000
@@ -91,8 +91,10 @@ async function startBot() {
     sock.ev.on('connection.update', (update) => {
         const { connection, lastDisconnect, qr } = update;
         if (qr) {
-            console.log('\nScan this QR code in WhatsApp:\n');
-            qrcode.generate(qr, { small: true });
+            console.log('\nScan this compact QR code in WhatsApp:\n');
+            qrcode.generate(qr, { small: true }, (qrcodeStr) => {
+                console.log(qrcodeStr);
+            });
         }
         if (connection === 'close') {
             const statusCode = lastDisconnect?.error?.output?.statusCode;
