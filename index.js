@@ -80,8 +80,8 @@ async function startBot() {
     // Added socket stability configs to prevent Render network drops
     const sock = makeWASocket({ 
         auth: state, 
-        printQRInTerminal: false, // Disables QR code generation in terminal
-        browser: ["Chrome", "Desktop", "122.0.0.0"], // Browser persona configured for pairing code
+        printQRInTerminal: false, // Handled manually below for clean compact formatting
+        browser: ["Chrome", "Desktop", "122.0.0.0"],
         connectTimeoutMs: 60000,
         keepAliveIntervalMs: 25000
     });
@@ -89,8 +89,18 @@ async function startBot() {
     sock.ev.on('creds.update', saveCreds);
 
     sock.ev.on('connection.update', (update) => {
-        const { connection, lastDisconnect } = update;
-        if (connection === 'close') {
+        const { connection, lastDisconnect, qr } = update;
+        
+        if (qr) {
+            console.log('\nScan this QR code in WhatsApp:\n');
+            qrcode.generate(qr, { small: true }, (qrcodeStr) => {
+                console.log(qrcodeStr);
+            });
+        }
+
+        if (connection === 'open') {
+            console.log('\n✅ Ultimate WhatsApp AI Bot (Powered by cold.era10) is active and session is saved!\n');
+        } else if (connection === 'close') {
             const statusCode = lastDisconnect?.error?.output?.statusCode;
             console.log(`🔌 Connection closed due to status code: ${statusCode}. Reconnecting...`);
             
@@ -104,27 +114,8 @@ async function startBot() {
             setTimeout(() => {
                 startBot();
             }, 5000);
-        } else if (connection === 'open') {
-            console.log('\n✅ Ultimate WhatsApp AI Bot (Powered by cold.era10) is active!\n');
         }
     });
-
-    // Safely request pairing code only when not registered, with a stable 7-second delay to guarantee handshake
-    if (!sock.authState.creds.registered) {
-        setTimeout(async () => {
-            try {
-                const phoneNumber = "27665989026";
-                console.log(`\n⏳ Requesting secure pairing code for ${phoneNumber}...`);
-                let code = await sock.requestPairingCode(phoneNumber);
-                code = code?.match(/.{1,4}/g)?.join("-") || code;
-                console.log(`\n🔗 ==========================================`);
-                console.log(`📱 YOUR WHATSAPP PAIRING CODE: [ ${code} ]`);
-                console.log(`==========================================\n`);
-            } catch (err) {
-                console.error("❌ Failed to generate pairing code:", err.message);
-            }
-        }, 7000);
-    }
 
     sock.ev.on('messages.upsert', async ({ messages, type }) => {
         console.log(`📥 [messages.upsert triggered] Type: ${type}, Count: ${messages.length}`);
