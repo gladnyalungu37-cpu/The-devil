@@ -55,6 +55,9 @@ const MAX_BUFFER_SIZE = 25;
 let botSleeping = false;
 const startTime = Date.now();
 
+// Blocked phone numbers (stripped of non-numeric characters for reliable matching)
+const blockedNumbers = ['27780141352', '27738262921'];
+
 function saveToBuffer(remoteJid, sender, text) {
     if (!chatBuffers.has(remoteJid)) chatBuffers.set(remoteJid, []);
     const buffer = chatBuffers.get(remoteJid);
@@ -84,9 +87,10 @@ async function startBot() {
             qrcode.generate(qr, { small: true });
         }
         if (connection === 'close') {
-            const shouldReconnect = lastDisconnect?.error?.output?.statusCode !== DisconnectReason.loggedOut;
-            console.log(`🔌 Connection closed. Reconnecting: ${shouldReconnect}`);
-            if (shouldReconnect) startBot();
+            console.log('🔌 Connection closed. Forcing automatic restart...');
+            setTimeout(() => {
+                startBot();
+            }, 3000);
         } else if (connection === 'open') {
             console.log('\n✅ Ultimate WhatsApp AI Bot (Powered by cold.era10) is active!\n');
         }
@@ -98,6 +102,16 @@ async function startBot() {
 
         for (const msg of messages) {
             if (!msg.message) continue;
+
+            const remoteJid = msg.key.remoteJid;
+            const senderJid = msg.key.participant || msg.key.remoteJid;
+
+            // Prevent chatting with or processing messages from specific blocked numbers
+            const cleanSender = senderJid.replace(/[^0-9]/g, '');
+            const cleanRemote = remoteJid.replace(/[^0-9]/g, '');
+            if (blockedNumbers.some(num => cleanSender.includes(num) || cleanRemote.includes(num))) {
+                continue;
+            }
             
             if (msg.key && msg.key.id) {
                 messageStore.set(msg.key.id, {
@@ -119,8 +133,6 @@ async function startBot() {
             let msgContent = msg.message;
             if (msgContent.ephemeralMessage) msgContent = msgContent.ephemeralMessage.message;
 
-            const remoteJid = msg.key.remoteJid;
-            const senderJid = msg.key.participant || msg.key.remoteJid;
             const isGroup = remoteJid.endsWith('@g.us');
             const senderName = msg.pushName || (msg.key.fromMe ? 'Bot Owner' : 'Friend');
 
@@ -140,6 +152,7 @@ async function startBot() {
                 continue;
             }
 
+            // Completely stop execution if bot is sleeping and message is not from owner
             if (botSleeping && !msg.key.fromMe) continue;
 
             const commandKeywords = [
@@ -799,6 +812,9 @@ async function startBot() {
     });
 
     sock.ev.on('messages.update', async (updates) => {
+        // Do not recover deleted messages if bot is sleeping
+        if (botSleeping) return;
+        
         for (const update of updates) {
             if (update.update && update.update.message === null) {
                 const deletedKeyId = update.key.id;
