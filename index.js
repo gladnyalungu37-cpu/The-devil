@@ -76,7 +76,15 @@ function runCommand(cmd) {
 
 async function startBot() {
     const { state, saveCreds } = await useMultiFileAuthState('auth_info_baileys');
-    const sock = makeWASocket({ auth: state, printQRInTerminal: true });
+    
+    // Added socket stability configs to prevent Render network drops
+    const sock = makeWASocket({ 
+        auth: state, 
+        printQRInTerminal: true,
+        browser: ["Ubuntu", "Chrome", "22.04.4"],
+        connectTimeoutMs: 60000,
+        keepAliveIntervalMs: 25000
+    });
 
     sock.ev.on('creds.update', saveCreds);
 
